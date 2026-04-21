@@ -1,0 +1,85 @@
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Play, Info } from 'lucide-react';
+import { useNavigate } from 'react-router'; 
+import TitleCards from '../Components/TitleCards';
+
+const Home = () => {
+  const [heroMovie, setHeroMovie] = useState(null);
+  const navigate = useNavigate(); 
+  const API_KEY = import.meta.env.VITE_TMDB_KEY;
+
+  useEffect(() => {
+    const getHero = async () => {
+      try {
+        const res = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
+        const results = res.data.results;
+        const randomMovie = results[Math.floor(Math.random() * results.length)];
+        setHeroMovie(randomMovie);
+      } catch (err) {
+        console.error("Error fetching hero:", err);
+      }
+    };
+    
+    if (API_KEY) {
+      getHero();
+    }
+  }, [API_KEY]);
+
+  const handleMoreInfo = () => {
+    if (heroMovie?.id) {
+      navigate(`/movie/${heroMovie.id}`);
+    }
+  };
+
+  return (
+    <div className='relative bg-[#141414] min-h-screen text-white overflow-hidden'>
+      
+      {/* Hero Section */}
+      <div className="relative w-full h-[80vh] md:h-[95vh] flex items-center">
+        <div className="absolute inset-0 z-0">
+          {heroMovie && (
+            <img 
+              src={`https://image.tmdb.org/t/p/original${heroMovie.backdrop_path}`} 
+              alt={heroMovie.title} 
+              className='w-full h-full object-cover brightness-[0.6] transition-opacity duration-1000' 
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-transparent to-transparent"></div>
+          <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[#141414] to-transparent"></div>
+        </div>
+
+        <div className="relative z-10 px-6 md:px-12 max-w-3xl mt-10">
+          <h1 className='text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white'>
+            {heroMovie?.title || heroMovie?.name || "Loading..."}
+          </h1>
+          <p className='text-sm md:text-lg text-gray-200 leading-snug mb-8 drop-shadow-md line-clamp-3 md:line-clamp-4'>
+            {heroMovie?.overview}
+          </p>
+          <div className="flex items-center gap-3">
+            <button className='flex items-center gap-2 bg-white text-black px-5 py-2 md:px-8 md:py-3 rounded hover:bg-white/80 transition font-bold shadow-lg'>
+              <Play className="fill-black w-5 h-5 md:w-6 md:h-6" /> Play
+            </button>
+
+            <button 
+              onClick={handleMoreInfo}
+              className='flex items-center gap-2 bg-gray-500/50 text-white px-5 py-2 md:px-8 md:py-3 rounded hover:bg-gray-500/30 transition font-bold backdrop-blur-md shadow-lg'
+            >
+              <Info className="w-5 h-5 md:w-6 md:h-6" /> More Info
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Movies Rows */}
+      <div className="relative z-20 px-0 -mt-10 md:-mt-24 flex flex-col gap-3 pb-35">
+        <TitleCards title="Blockbuster Movies" category="top_rated" />
+        <TitleCards title="Only on LuxFilm" category="popular" />
+        <TitleCards title="Upcoming" category="upcoming" />
+        <TitleCards title="Top Picks for You" category="now_playing" />
+      </div>
+    </div>
+  );
+};
+
+export default Home;
