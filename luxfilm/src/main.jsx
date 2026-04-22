@@ -5,6 +5,8 @@ import { MainLayouts } from './Layouts/MainLayouts';
 import  Home  from './Pages/Home';
 import MovieDetails from './pages/MovieDetails';
 import GenrePage from './Pages/GenrePage';
+import Login from './Pages/Login';
+import Register from './Pages/Register';
 import './index.css'
 
 
@@ -12,6 +14,14 @@ import './index.css'
 
 
 const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/register',
+    element: <Register />
+  },
   {
     path: '/',
     element: <MainLayouts />, 
