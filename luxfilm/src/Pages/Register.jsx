@@ -148,21 +148,7 @@ const Register = () => {
         setError('Please fill empty fields correctly.');
         toast.error('Validation failed');
       }
-      // 2. Handle specific error codes from authService
-      else {
-        const msg = err.message;
 
-        if (msg === 'AUTH_EMAIL_EXISTS' || msg === 'User with this email already exists') {
-          setErrors({ email: 'User with this email already exists' });
-          setError('Email already registered');
-        } else if (msg === 'AUTH_USERNAME_TAKEN' || msg === 'Username is already taken') {
-          setErrors({ userName: 'Username is already taken' });
-          setError('Username taken');
-        } else {
-          setError(msg || 'Registration failed. Please try again.');
-          toast.error(msg || 'Registration failed');
-        }
-      }
     } finally {
       setLoading(false);
     }
