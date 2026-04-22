@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import axios from 'axios';
 import logo from '../assets/logo.png';
-import { Search, LogIn, Languages, CircleUserRound, ChevronDown } from 'lucide-react';
+import { Search, LogIn, LogOut, Languages, CircleUserRound, ChevronDown } from 'lucide-react';
+import { authService } from '../services/authService';
 import '../index.css';
 
 const Navbar = () => {
@@ -10,6 +11,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [genres, setGenres] = useState([]);
+  const [user, setUser] = useState(null);
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
   useEffect(() => {
@@ -24,10 +26,30 @@ const Navbar = () => {
        }
     };
 
+    // Check for logged in user using authService
+    const checkUser = () => {
+      const currentUser = authService.getCurrentUser();
+      setUser(currentUser);
+    };
+
     fetchGenres();
+    checkUser();
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Listen for storage changes in case of multi-tab login/logout
+    window.addEventListener('storage', checkUser);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('storage', checkUser);
+    };
   }, [API_KEY]);
+
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+    navigate('/login');
+  };
 
   const navItemClass = "cursor-pointer hover:text-[#660B05] transition duration-300 font-semibold";
 
@@ -86,11 +108,33 @@ const Navbar = () => {
           </select>
         </div>
 
-        <CircleUserRound size={24} className="cursor-pointer hover:text-gray-300 transition" />
-        <LogIn size={24} className="cursor-pointer hover:text-[#660B05] transition" onClick={() => navigate('/login')} />
+        <div className="flex items-center gap-3">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="hidden lg:block text-xs font-semibold text-gray-300">
+                Hi, {user.fullName || user.email.split('@')[0]}
+              </span>
+              <CircleUserRound size={24} className="cursor-pointer hover:text-gray-300 transition" />
+              <LogOut 
+                size={24} 
+                className="cursor-pointer hover:text-[#ff4444] transition" 
+                onClick={handleLogout} 
+                title="Log Out"
+              />
+            </div>
+          ) : (
+            <LogIn 
+              size={24} 
+              className="cursor-pointer hover:text-[#660B05] transition" 
+              onClick={() => navigate('/login')} 
+              title="Log In"
+            />
+          )}
+        </div>
       </div>
     </nav>
   );
 };
 
 export default Navbar;
+
