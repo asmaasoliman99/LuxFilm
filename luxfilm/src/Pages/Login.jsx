@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
+import toast from 'react-hot-toast';
 import logo from '../assets/logo.png';
+import { authService } from '../services/authService';
 
 // Zod validation schema
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   password: z.string().min(1, 'Password is required'),
 });
 
@@ -19,6 +21,32 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // handle blur validation - Uses single state update
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    let fieldError = '';
+
+    const fieldSchema = loginSchema.shape[name];
+    if (fieldSchema) {
+      const result = fieldSchema.safeParse(value);
+      if (!result.success) {
+        // FIX: Defensive check on Zod errors array
+        fieldError = result.error.errors?.[0]?.message || 'Invalid input';
+      }
+    }
+
+    setErrors(prev => {
+      if (prev[name] === fieldError) return prev; // Optimization: Don't re-render if error hasn't changed
+      const newErrors = { ...prev };
+      if (fieldError) {
+        newErrors[name] = fieldError;
+      } else {
+        delete newErrors[name];
+      }
+      return newErrors;
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -26,26 +54,35 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Validate using Zod
       const validatedData = loginSchema.parse({ email, password });
-      
-      // Simulated login - Replace with actual API call
-      console.log('Login attempt:', validatedData);
-      
-      // Simulate API delay
-      setTimeout(() => {
-        navigate('/');
-      }, 600);
+
+      // Attempt local login
+      const user = authService.loginUser(validatedData.email, validatedData.password);
+
+      toast.success(`Welcome back, ${user.fullName || 'User'}!`);
+      navigate('/');
     } catch (err) {
+      console.error('Authentication Error:', err);
+
+      // 1. Handle Zod Validation Errors
       if (err instanceof z.ZodError) {
+        const fieldErrors = err.flatten().fieldErrors;
         const formattedErrors = {};
-        err.errors.forEach((error) => {
-          formattedErrors[error.path[0]] = error.message;
+
+        // Map fieldErrors (arrays) to single strings for our UI
+        Object.keys(fieldErrors).forEach(key => {
+          formattedErrors[key] = fieldErrors[key][0];
         });
+
         setErrors(formattedErrors);
-        setError('Please fix the errors below');
-      } else {
-        setError('Login failed. Please try again.');
+        setError('Please fill empty fields correctly.');
+        toast.error('Validation failed');
+      }
+      // 2. Handle Errors from authService (e.g. Invalid credentials)
+      else {
+        const msg = err?.message || 'Login failed. Please try again.';
+        setError(msg);
+        toast.error(msg);
       }
     } finally {
       setLoading(false);
@@ -54,7 +91,7 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen bg-[#141414] flex flex-col items-center justify-center overflow-hidden">
-      
+
       {/* Gradient Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
@@ -64,7 +101,7 @@ const Login = () => {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md px-6">
-        
+
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Link to="/">
@@ -74,7 +111,7 @@ const Login = () => {
 
         {/* Form Card */}
         <div className="bg-black/40 backdrop-blur-xl border border-[#842A3B]/30 rounded-2xl p-8 shadow-2xl">
-          
+
           <h1 className="text-3xl font-extrabold text-white mb-2 text-center">Welcome Back</h1>
           <p className="text-gray-400 text-center mb-8 text-sm">Sign in to your LuxFilm account</p>
 
@@ -86,7 +123,7 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            
+
             {/* Email Field */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-300 mb-2">Email Address</label>
@@ -94,8 +131,10 @@ const Login = () => {
                 <Mail size={18} className="text-gray-400" />
                 <input
                   type="email"
+                  name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={handleBlur}
                   placeholder="your@email.com"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
@@ -110,8 +149,10 @@ const Login = () => {
                 <Lock size={18} className="text-gray-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onBlur={handleBlur}
                   placeholder="••••••••"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
@@ -167,7 +208,7 @@ const Login = () => {
           <Link to="/register">
             <button
               type="button"
-              className="w-full border-2 border-[#842A3B] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#842A3B]/10 transition-all duration-300"
+              className="w-full border-2 border-[#842A3B] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#842A3B] transition-all duration-300"
             >
               Create Account
             </button>
