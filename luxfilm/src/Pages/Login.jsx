@@ -30,8 +30,7 @@ const Login = () => {
     if (fieldSchema) {
       const result = fieldSchema.safeParse(value);
       if (!result.success) {
-        // FIX: Defensive check on Zod errors array
-        fieldError = result.error.errors?.[0]?.message || 'Invalid input';
+        fieldError = result.error.issues[0]?.message || 'Invalid input';
       }
     }
 

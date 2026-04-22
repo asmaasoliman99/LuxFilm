@@ -1,48 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router';
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
+import toast from 'react-hot-toast';
 import logo from '../assets/logo.png';
+import { authService } from '../services/authService';
+import { movieService } from '../services/movieService';
 
-// Zod validation schema
-const registerSchema = z.object({
+// Base schema for individual field validation (has .shape)
+const registerBaseSchema = z.object({
   fullName: z
     .string()
     .min(1, 'Full name is required')
     .refine((name) => name.trim().split(' ').length >= 2, {
       message: 'Please enter your first and last name',
     }),
-  email: z.string().email('Invalid email address'),
+  userName: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+  email: z.email('Invalid email address'),
   phone: z
     .string()
-    .optional()
-    .refine((phone) => !phone || /^\d{10,}$/.test(phone.replace(/\D/g, '')), {
-      message: 'Please enter a valid phone number',
-    }),
+    .min(10, 'Phone number must be at least 10 digits')
+    .regex(/^\d+$/, 'Phone number must contain only digits'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
+});
+
+// Full schema with refinements for form submission
+const registerSchema = registerBaseSchema.refine((data) => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
 });
 
+// Register component
 const Register = () => {
+
   const navigate = useNavigate();
+  // form data state
   const [formData, setFormData] = useState({
     fullName: '',
+    userName: '',
     email: '',
     phone: '',
     password: '',
     confirmPassword: '',
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [backdrop, setBackdrop] = useState('');
 
+  // fetch backdrop from TMDB
+  useEffect(() => {
+    const fetchBackdrop = async () => {
+      try {
+        const backdropUrl = await movieService.getTrendingBackdrop();
+        if (backdropUrl) {
+          setBackdrop(backdropUrl);
+        }
+      } catch (err) {
+        console.error("Backdrop fetch error:", err);
+      }
+    };
+    fetchBackdrop();
+  }, []);
+
+  // handle form change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -50,34 +80,88 @@ const Register = () => {
     });
   };
 
+  // handle blur validation - Uses baseSchema.shape for reliability
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    let fieldError = '';
+
+    if (name === 'confirmPassword') {
+      if (value !== formData.password) {
+        fieldError = 'Passwords do not match';
+      }
+    } else {
+      const fieldSchema = registerBaseSchema.shape[name];
+      if (fieldSchema) {
+        const result = fieldSchema.safeParse(value);
+        if (!result.success) {
+          // Use .issues for standard Zod reliability
+          fieldError = result.error.issues[0]?.message || 'Invalid input';
+        }
+      }
+    }
+
+    setErrors(prev => {
+      const newErrors = { ...prev };
+      if (fieldError) {
+        newErrors[name] = fieldError;
+      } else {
+        delete newErrors[name];
+      }
+      return newErrors;
+    });
+  };
+
+  // handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setErrors({});
-
     setLoading(true);
 
     try {
-      // Validate using Zod
+      // Validate using full schema
       const validatedData = registerSchema.parse(formData);
-      
-      // Simulated registration - Replace with actual API call
-      console.log('Registration attempt:', validatedData);
-      
-      // Simulate API delay
+
+      // Register via local service
+      authService.registerUser(validatedData);
+
+      toast.success('Account created successfully!');
+
+      // Navigate to login on success
       setTimeout(() => {
-        navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } });
-      }, 800);
+        navigate('/login');
+      }, 1500);
     } catch (err) {
+      console.error('Registration Error:', err);
+
+      // 1. Handle Zod Validation Errors
       if (err instanceof z.ZodError) {
+        const fieldErrors = err.flatten().fieldErrors;
         const formattedErrors = {};
-        err.errors.forEach((error) => {
-          formattedErrors[error.path[0]] = error.message;
+
+        // Map fieldErrors (arrays) to single strings for our UI
+        Object.keys(fieldErrors).forEach(key => {
+          formattedErrors[key] = fieldErrors[key][0];
         });
+
         setErrors(formattedErrors);
-        setError('Please fix the errors below');
-      } else {
-        setError('Registration failed. Please try again.');
+        setError('Please fill empty fields correctly.');
+        toast.error('Validation failed');
+      }
+      // 2. Handle specific error codes from authService
+      else {
+        const msg = err.message;
+
+        if (msg === 'AUTH_EMAIL_EXISTS' || msg === 'User with this email already exists') {
+          setErrors({ email: 'User with this email already exists' });
+          setError('Email already registered');
+        } else if (msg === 'AUTH_USERNAME_TAKEN' || msg === 'Username is already taken') {
+          setErrors({ userName: 'Username is already taken' });
+          setError('Username taken');
+        } else {
+          setError(msg || 'Registration failed. Please try again.');
+          toast.error(msg || 'Registration failed');
+        }
       }
     } finally {
       setLoading(false);
@@ -97,7 +181,7 @@ const Register = () => {
 
   return (
     <div className="relative min-h-screen bg-[#141414] flex flex-col items-center justify-center overflow-hidden py-12">
-      
+
       {/* Gradient Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
@@ -105,9 +189,10 @@ const Register = () => {
         <div className="absolute -bottom-8 left-1/2 w-96 h-96 bg-[#3E0703] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       </div>
 
+
       {/* Content */}
       <div className="relative z-10 w-full max-w-md px-6">
-        
+
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <Link to="/">
@@ -117,7 +202,7 @@ const Register = () => {
 
         {/* Form Card */}
         <div className="bg-black/40 backdrop-blur-xl border border-[#842A3B]/30 rounded-2xl p-8 shadow-2xl">
-          
+
           <h1 className="text-3xl font-extrabold text-white mb-2 text-center">Join LuxFilm</h1>
           <p className="text-gray-400 text-center mb-8 text-sm">Create your account and start streaming</p>
 
@@ -129,7 +214,7 @@ const Register = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             {/* Full Name Field */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2">Full Name</label>
@@ -140,11 +225,30 @@ const Register = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="John Doe"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.fullName && <p className="text-[#ff6b6b] text-sm mt-1">{errors.fullName}</p>}
+            </div>
+
+            {/* Username Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Username</label>
+              <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.userName ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
+                <User size={18} className="text-gray-400" />
+                <input
+                  type="text"
+                  name="userName"
+                  value={formData.userName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="johndoe123"
+                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                />
+              </div>
+              {errors.userName && <p className="text-[#ff6b6b] text-sm mt-1">{errors.userName}</p>}
             </div>
 
             {/* Email Field */}
@@ -157,6 +261,7 @@ const Register = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="your@email.com"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
@@ -174,7 +279,8 @@ const Register = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+1 (555) 123-4567"
+                  onBlur={handleBlur}
+                  placeholder="0123456789"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
@@ -191,6 +297,7 @@ const Register = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="••••••••"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
@@ -203,19 +310,6 @@ const Register = () => {
                 </button>
               </div>
               {errors.password && <p className="text-[#ff6b6b] text-sm mt-1">{errors.password}</p>}
-              {/* Password Strength Indicator */}
-              {formData.password && (
-                <div className="mt-2 flex gap-1">
-                  {[...Array(4)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-1 flex-1 rounded-full transition-colors ${
-                        i < strength ? 'bg-[#842A3B]' : 'bg-white/10'
-                      }`}
-                    ></div>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Confirm Password Field */}
@@ -228,6 +322,7 @@ const Register = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="••••••••"
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
@@ -242,19 +337,11 @@ const Register = () => {
               {errors.confirmPassword && <p className="text-[#ff6b6b] text-sm mt-1">{errors.confirmPassword}</p>}
             </div>
 
-            {/* Terms & Conditions */}
-            <label className="flex items-start gap-3 cursor-pointer text-sm">
-              <input type="checkbox" className="w-4 h-4 mt-0.5 bg-white/10 border border-white/20 rounded cursor-pointer accent-[#842A3B]" required />
-              <span className="text-gray-400">
-                I agree to the <a href="#" className="text-[#842A3B] hover:underline">Terms of Service</a> and <a href="#" className="text-[#842A3B] hover:underline">Privacy Policy</a>
-              </span>
-            </label>
-
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-[#842A3B] to-[#662222] hover:from-[#A3485A] hover:to-[#7d3535] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+              className="w-full bg-gradient-to-r from-[#842A3B] to-[#662222] hover:from-[#A3485A] hover:to-[#7d3535] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 shadow-lg"
             >
               {loading ? (
                 <span className="animate-pulse">Creating account...</span>
@@ -280,17 +367,12 @@ const Register = () => {
           <Link to="/login">
             <button
               type="button"
-              className="w-full border-2 border-[#842A3B] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#842A3B]/10 transition-all duration-300"
+              className="w-full border-2 border-[#842A3B] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#842A3B] transition-all duration-300"
             >
               Sign In
             </button>
           </Link>
         </div>
-
-        {/* Footer Text */}
-        <p className="text-center text-gray-500 text-xs mt-6">
-          By creating an account, you confirm that you're at least 18 years old
-        </p>
       </div>
     </div>
   );
