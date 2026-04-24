@@ -1,53 +1,66 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider,createBrowserRouter } from 'react-router';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider, createBrowserRouter } from 'react-router';
+import { Toaster } from 'react-hot-toast';
+
+import { AuthProvider } from './Context/AuthContext';
+import { WishlistProvider } from './Context/WishlistContext';
+
 import { MainLayouts } from './Layouts/MainLayouts';
-import  Home  from './Pages/Home';
-import MovieDetails from './pages/MovieDetails';
+import Home from './Pages/Home';
+import MovieDetails from './Pages/MovieDetails';
 import GenrePage from './Pages/GenrePage';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import './index.css'
+import WishlistPage from './Pages/WishlistPage';
+import AccountPage from './Pages/AccountPage';
 
-
-
-
+import './index.css';
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />
+    element: <Login />,
   },
   {
     path: '/register',
-    element: <Register />
+    element: <Register />,
   },
   {
     path: '/',
-    element: <MainLayouts />, 
+    element: <MainLayouts />,
     children: [
       {
-        index:true,
-        element:<Home />,
+        index: true,
+        element: <Home />,
       },
       {
-        path:"/movie/:id",
-        element:<MovieDetails />
+        path: '/movie/:id',
+        element: <MovieDetails />,
       },
       {
-        path:"/genre/:genreId/:genreName",
-        element: <GenrePage />
-      }
-       
-    ]
-  }
+        path: '/genre/:genreId/:genreName',
+        element: <GenrePage />,
+      },
+      {
+        path: '/wishlist',
+        element: <WishlistPage />,
+      },
+      {
+        path: '/account',
+        element: <AccountPage />,
+      },
+    ],
+  },
 ]);
-
-import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Toaster position="top-right" reverseOrder={false} />
-    <RouterProvider router ={router} />
-  </StrictMode>,
-)
+    <AuthProvider>
+      <WishlistProvider>
+        <Toaster position="top-right" reverseOrder={false} />
+        <RouterProvider router={router} />
+      </WishlistProvider>
+    </AuthProvider>
+  </StrictMode>
+);
