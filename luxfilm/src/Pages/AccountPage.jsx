@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
   User, Mail, Phone, Lock, Eye, EyeOff, Edit3, Save, X,
@@ -218,13 +218,6 @@ const AccountPage = () => {
                 <h1 className="text-2xl md:text-3xl font-black">{user.fullName || 'User'}</h1>
                 <p className="text-gray-400 text-sm">@{user.userName || user.email?.split('@')[0]}</p>
               </div>
-
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 border border-gray-700 text-gray-400 hover:border-red-500 hover:text-red-500 transition-all duration-300 px-4 py-2 rounded-lg text-sm font-semibold"
-              >
-                <LogOut size={15} /> Sign Out
-              </button>
             </div>
 
             {/* Stats row */}
