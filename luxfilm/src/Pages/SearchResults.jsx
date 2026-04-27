@@ -88,7 +88,7 @@ const SearchResults = () => {
   )?.name;
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white pt-28 px-5 md:px-10 pb-14">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] pt-28 px-5 md:px-10 pb-14">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">

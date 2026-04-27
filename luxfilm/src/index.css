@@ -1,40 +1,55 @@
 @import "tailwindcss";
 
 :root {
+  --primary-burgundy: #662222;
+  --accent-rose: #842a3b;
+  --deep-wine: #3e0703;
 
-  --primary-burgundy: #662222;    
-  --accent-rose: #842A3B;        
-  --deep-wine: #3E0703;         
+  --text-main: #660b05;
+  --text-body: #121212;
 
-
-  --text-main: #660B05;          
-  --text-body: #121212;         
-  
-  --bg-creamy: #FFF0C4;          
-  --bg-sand: #F5DAA7;           
+  --bg-creamy: #fff0c4;
+  --bg-sand: #f5daa7;
   --white-pure: #ffffff;
 
-  --border-color: #A3485A;       
-  --error-red: #8C1007;         
+  --border-color: #a3485a;
+  --error-red: #8c1007;
 }
 
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #121212;
+  --text-secondary: #6c757d;
+  --border: #dee2e6;
+  --accent: #842a3b;
+}
+
+.dark {
+  --bg-primary: #141414;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #adb5bd;
+  --border: #495057;
+  --accent: #842a3b;
+}
 
 @layer utilities {
-
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar {
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
     scrollbar-width: none;
   }
 }
 
-
 body {
-  background-color: #141414; 
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
-
-

@@ -37,7 +37,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative bg-[#141414] min-h-screen text-white overflow-hidden">
+    <div className="relative bg-[var(--bg-primary)] min-h-screen text-[var(--text-primary)] overflow-hidden">
       {/* Hero Section */}
       <div className="relative w-full h-[80vh] md:h-[95vh] flex items-center">
         <div className="absolute inset-0 z-0">
@@ -48,12 +48,12 @@ const Home = () => {
               className="w-full h-full object-cover brightness-[0.6] transition-opacity duration-1000"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-transparent to-transparent"></div>
-          <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[#141414] to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-primary)] via-transparent to-transparent"></div>
+          <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[var(--bg-primary)] to-transparent"></div>
         </div>
 
-        <div className="relative z-10 px-6 md:px-12 max-w-3xl mt-10">
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white">
+        <div className="relative z-10 px-6 md:px-12 max-w-3xl mt-1">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-1 drop-shadow-lg text-white">
             {heroMovie?.title || heroMovie?.name || t("loading")}
           </h1>
           <p className="text-sm md:text-lg text-gray-200 leading-snug mb-8 drop-shadow-md line-clamp-3 md:line-clamp-4">
@@ -75,7 +75,7 @@ const Home = () => {
       </div>
 
       {/* Movies Rows */}
-      <div className="relative z-20 px-0 -mt-10 md:-mt-24 flex flex-col gap-3 pb-35">
+      <div className="relative z-20 px-0 -mt-1 md:-mt-24 flex flex-col gap-1 pb-35">
         <TitleCards title={t("blockbusterMovies")} category="top_rated" />
         <TitleCards title={t("onlyOnLuxFilm")} category="popular" />
         <TitleCards title={t("upcoming")} category="upcoming" />
