@@ -19,8 +19,8 @@
 .light {
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
-  --text-primary: #121212;
-  --text-secondary: #6c757d;
+  --text-primary: #000000;
+  --text-secondary: #333333;
   --border: #dee2e6;
   --accent: #842a3b;
 }

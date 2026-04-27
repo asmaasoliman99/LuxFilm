@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Sun,
   Moon,
+  LogOut,
 } from "lucide-react";
 import { LanguageContext } from "../context/LanguageContext.js";
 import "../index.css";
@@ -25,7 +26,7 @@ const Navbar = () => {
   const [genres, setGenres] = useState([]);
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
   const { toggleTheme, setTheme, theme } = useContext(ThemeContext);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -148,8 +149,8 @@ const Navbar = () => {
                 <option key={genre.id} value={genre.id}>
                   {genre.name}
                 </option> */}
-              {/* ))} */}
-            {/* </select>
+          {/* ))} */}
+          {/* </select>
           )} */}
         </form>
 
@@ -170,11 +171,24 @@ const Navbar = () => {
         </div>
 
         {user ? (
-          <CircleUserRound
-            size={24}
-            className="cursor-pointer hover:text-gray-300 transition"
-            onClick={() => navigate("/account")}
-          />
+          <div className="flex items-center gap-3">
+            <CircleUserRound
+              size={24}
+              className="cursor-pointer hover:text-gray-300 transition"
+              onClick={() => navigate("/account")}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+              className="cursor-pointer hover:text-red-500 transition"
+              title={t("signOut")}
+            >
+              <LogOut size={24} />
+            </button>
+          </div>
         ) : (
           <LogIn
             size={24}

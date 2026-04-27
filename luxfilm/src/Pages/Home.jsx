@@ -4,9 +4,11 @@ import { Play, Info } from "lucide-react";
 import { useNavigate } from "react-router";
 import TitleCards from "../Components/TitleCards";
 import { LanguageContext } from "../context/LanguageContext.js";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Home = () => {
   const { t } = useContext(LanguageContext);
+  const { theme } = useContext(ThemeContext);
   const [heroMovie, setHeroMovie] = useState(null);
   const navigate = useNavigate();
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
@@ -53,10 +55,14 @@ const Home = () => {
         </div>
 
         <div className="relative z-10 px-6 md:px-12 max-w-3xl mt-1">
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-1 drop-shadow-lg text-white">
+          <h1
+            className={`text-4xl md:text-6xl font-extrabold mb-1 drop-shadow-lg ${theme === "light" ? "text-black" : "text-white"}`}
+          >
             {heroMovie?.title || heroMovie?.name || t("loading")}
           </h1>
-          <p className="text-sm md:text-lg text-gray-200 leading-snug mb-8 drop-shadow-md line-clamp-3 md:line-clamp-4">
+          <p
+            className={`text-sm md:text-lg leading-snug mb-8 drop-shadow-md line-clamp-3 md:line-clamp-4 ${theme === "light" ? "text-gray-700" : "text-gray-200"}`}
+          >
             {heroMovie?.overview}
           </p>
           <div className="flex items-center gap-3">

@@ -14,21 +14,21 @@ const Footer = () => {
 
           <div className="flex gap-6 text-xs font-bold tracking-widest uppercase">
             <span className="cursor-pointer hover:text-[#660B05] transition-colors">
-              Facebook
+              {t("facebook")}
             </span>
             <span className="cursor-pointer hover:text-[#660B05] transition-colors">
-              Instagram
+              {t("instagram")}
             </span>
             <span className="cursor-pointer hover:text-[#660B05] transition-colors">
-              Twitter
+              {t("twitter")}
             </span>
             <span className="cursor-pointer hover:text-[#660B05] transition-colors">
-              Youtube
+              {t("youtube")}
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-400">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-[var(--text-secondary)]">
           <ul className="flex flex-col gap-3">
             <li className="hover:text-[var(--text-primary)] cursor-pointer transition">
               {t("audioDescription")}
@@ -79,13 +79,13 @@ const Footer = () => {
         </div>
 
         <div className="mt-10">
-          <button className="border border-gray-600 px-2 py-1 text-xs hover:border-white hover:text-white transition">
-            Service Code
+          <button className="border border-[var(--border)] px-2 py-1 text-xs text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--text-primary)] transition">
+            {t("serviceCode")}
           </button>
         </div>
 
-        <div className="mt-6 text-[11px] text-gray-500">
-          © 1997-2026 LuxFilm, Inc.
+        <div className="mt-6 text-[11px] text-[var(--text-secondary)]">
+          {t("copyrightNotice")}
         </div>
       </div>
     </footer>
