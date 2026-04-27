@@ -14,6 +14,7 @@ import {
 import { LanguageContext } from "../context/LanguageContext.js";
 import "../index.css";
 import { ThemeContext } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [genres, setGenres] = useState([]);
-  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
   const { toggleTheme, setTheme, theme } = useContext(ThemeContext);
+  const { user } = useAuth();
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -66,21 +67,6 @@ const Navbar = () => {
   const { lang, setLang, t } = useContext(LanguageContext);
   const navItemClass =
     "cursor-pointer hover:text-[#660B05] transition duration-300 font-semibold";
-
-  // Close theme menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      const themeContainer = document.getElementById("theme-container");
-      if (themeContainer && !themeContainer.contains(e.target)) {
-        setThemeMenuOpen(false);
-      }
-    };
-
-    if (themeMenuOpen) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
-  }, [themeMenuOpen]);
 
   return (
     <nav
@@ -151,20 +137,20 @@ const Navbar = () => {
             />
           </div>
 
-          {isSearchOpen && (
+          {/* {isSearchOpen && (
             <select
               value={selectedGenre}
               onChange={(e) => setSelectedGenre(e.target.value)}
               className="bg-[var(--bg-secondary)]/70 border border-[var(--border)]/40 text-sm text-[var(--text-primary)] rounded-full px-3 py-2 outline-none"
             >
-              <option value="">{t("allGenres")}</option>
+              {/* <option value="">{t("allGenres")}</option>
               {genres.map((genre) => (
                 <option key={genre.id} value={genre.id}>
                   {genre.name}
-                </option>
-              ))}
-            </select>
-          )}
+                </option> */}
+              {/* ))} */}
+            {/* </select>
+          )} */}
         </form>
 
         <div className="flex items-center gap-2 border border-[var(--border)] rounded bg-[var(--bg-secondary)]/40 px-2 py-1">
@@ -183,65 +169,33 @@ const Navbar = () => {
           </select>
         </div>
 
-        <CircleUserRound
-          size={24}
-          className="cursor-pointer hover:text-gray-300 transition"
-        />
-        <LogIn
-          size={24}
-          className="cursor-pointer hover:text-[#660B05] transition"
-          onClick={() => navigate("/login")}
-        />
-        <div className="relative" id="theme-container">
-          <button
-            onClick={() => setThemeMenuOpen((prev) => !prev)}
-            className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-secondary)] border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-lg transition-all duration-300"
-            title={`Current: ${theme === "light" ? "Light Mode" : "Dark Mode"}`}
-          >
-            {theme === "light" ? (
-              <Sun size={16} className="text-amber-500" />
-            ) : (
-              <Moon size={16} className="text-blue-400" />
-            )}
-            <span className="text-xs font-medium text-[var(--text-primary)]">
-              {theme === "light" ? "Light" : "Dark"}
-            </span>
-          </button>
-
-          {themeMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border)] shadow-2xl overflow-hidden z-50 backdrop-blur-sm">
-              <button
-                onClick={() => {
-                  setTheme("light");
-                  setThemeMenuOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition ${
-                  theme === "light"
-                    ? "bg-[var(--accent)] text-white font-bold"
-                    : "text-[var(--text-primary)] hover:bg-[var(--accent)]/20"
-                }`}
-              >
-                <Sun size={18} className="text-amber-500" />
-                <span>{t("lightMode")}</span>
-              </button>
-              <div className="h-px bg-[var(--border)]" />
-              <button
-                onClick={() => {
-                  setTheme("dark");
-                  setThemeMenuOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition ${
-                  theme === "dark"
-                    ? "bg-[var(--accent)] text-white font-bold"
-                    : "text-[var(--text-primary)] hover:bg-[var(--accent)]/20"
-                }`}
-              >
-                <Moon size={18} className="text-blue-400" />
-                <span>{t("darkMode")}</span>
-              </button>
-            </div>
+        {user ? (
+          <CircleUserRound
+            size={24}
+            className="cursor-pointer hover:text-gray-300 transition"
+            onClick={() => navigate("/account")}
+          />
+        ) : (
+          <LogIn
+            size={24}
+            className="cursor-pointer hover:text-[#660B05] transition"
+            onClick={() => navigate("/login")}
+          />
+        )}
+        <button
+          onClick={toggleTheme}
+          className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-secondary)] border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-lg transition-all duration-300"
+          title={`Current: ${theme === "light" ? "Light Mode" : "Dark Mode"}`}
+        >
+          {theme === "light" ? (
+            <Sun size={16} className="text-amber-500" />
+          ) : (
+            <Moon size={16} className="text-blue-400" />
           )}
-        </div>
+          <span className="text-xs font-medium text-[var(--text-primary)]">
+            {theme === "light" ? "Light" : "Dark"}
+          </span>
+        </button>
       </div>
     </nav>
   );

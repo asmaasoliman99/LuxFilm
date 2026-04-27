@@ -253,12 +253,12 @@ const AccountPage = () => {
                 </p>
               </div>
 
-              <button
+              {/* <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 border border-gray-700 text-gray-400 hover:border-red-500 hover:text-red-500 transition-all duration-300 px-4 py-2 rounded-lg text-sm font-semibold"
               >
                 <LogOut size={15} /> {t("signOut")}
-              </button>
+              </button> */}
             </div>
 
             {/* Stats row */}
