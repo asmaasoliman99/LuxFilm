@@ -18,6 +18,9 @@ import { ThemeContext } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { lang, setLang, t } = useContext(LanguageContext);
+  const { toggleTheme, setTheme, theme } = useContext(ThemeContext);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -25,8 +28,6 @@ const Navbar = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [genres, setGenres] = useState([]);
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
-  const { toggleTheme, setTheme, theme } = useContext(ThemeContext);
-  const { user, logout } = useAuth();
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -52,20 +53,20 @@ const Navbar = () => {
     const fetchGenres = async () => {
       try {
         const res = await axios.get(
-          `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=${lang}`,
         );
         setGenres(res.data.genres);
       } catch {
-        console.error("Error fetching genres");
+        console.error("Error fetching genres", err);
       }
     };
 
     fetchGenres();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [API_KEY]);
+  }, [API_KEY, lang]);
 
-  const { lang, setLang, t } = useContext(LanguageContext);
+  // const { lang, setLang, t } = useContext(LanguageContext);
   const navItemClass =
     "cursor-pointer hover:text-[#660B05] transition duration-300 font-semibold";
 
@@ -82,7 +83,7 @@ const Navbar = () => {
           />
         </Link>
 
-        <ul className="hidden md:flex items-center gap-5 text-sm text-[ #000000]">
+        <ul className="hidden md:flex items-center gap-5 text-sm text-[#000000]">
           <li className={navItemClass}>
             <Link to="/">{t("home")}</Link>
           </li>

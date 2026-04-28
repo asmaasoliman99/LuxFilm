@@ -9,7 +9,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
   const [videoKey, setVideoKey] = useState(null);
   const [hovering, setHovering] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
-  const { t } = useContext(LanguageContext);
+  const { t, lang } = useContext(LanguageContext);
 
   const inWishlist = isInWishlist(movie.id);
 
@@ -28,7 +28,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
     if (videoKey) return;
     try {
       const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`,
+        `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}&language=${lang}`,
       );
       const trailer = data.results.find(
         (v) =>

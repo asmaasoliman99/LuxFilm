@@ -43,7 +43,7 @@ const registerSchema = registerBaseSchema.refine(
 // Register component
 const Register = () => {
   const navigate = useNavigate();
-  const { t } = React.useContext(LanguageContext);
+  const { t, lang } = React.useContext(LanguageContext);
   // form data state
   const [formData, setFormData] = useState({
     fullName: "",
@@ -59,13 +59,13 @@ const Register = () => {
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  // const [backdrop, setBackdrop] = useState("");
+  const [backdrop, setBackdrop] = useState("");
 
   // fetch backdrop from TMDB
   useEffect(() => {
     const fetchBackdrop = async () => {
       try {
-        const backdropUrl = await movieService.getTrendingBackdrop();
+        const backdropUrl = await movieService.getTrendingBackdrop(lang);
         if (backdropUrl) {
           setBackdrop(backdropUrl);
         }
@@ -74,7 +74,7 @@ const Register = () => {
       }
     };
     fetchBackdrop();
-  }, []);
+  }, [lang]);
 
   // handle form change
   const handleChange = (e) => {

@@ -10,9 +10,11 @@ import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
 import { ThemeContext } from "../context/ThemeContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 const TitleCards = ({ title, category, isGenre = false }) => {
   const { theme } = useContext(ThemeContext);
+  const { lang } = useContext(LanguageContext);
   const [movies, setMovies] = useState([]);
   const [genresList, setGenresList] = useState([]);
   const [page, setPage] = useState(1);
@@ -25,13 +27,13 @@ const TitleCards = ({ title, category, isGenre = false }) => {
 
   const constructUrl = useCallback(
     (pageNum) => {
-      const params = `api_key=${API_KEY}&page=${pageNum}`;
+      const params = `api_key=${API_KEY}&page=${pageNum}&language=${lang}`;
       if (isGenre)
         return `${BASE_URL}/discover/movie?${params}&with_genres=${category}`;
       if (category.includes("/")) return `${BASE_URL}/${category}?${params}`;
       return `${BASE_URL}/movie/${category || "now_playing"}?${params}`;
     },
-    [category, isGenre, API_KEY],
+    [category, isGenre, API_KEY, lang],
   );
 
   const pageCount = useMemo(() => {
@@ -46,7 +48,9 @@ const TitleCards = ({ title, category, isGenre = false }) => {
         setPage(1);
         setActivePageIndex(0);
         const [g, m] = await Promise.all([
-          axios.get(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`),
+          axios.get(
+            `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=${lang}`,
+          ),
           axios.get(constructUrl(1)),
         ]);
         setGenresList(g.data.genres);
@@ -57,7 +61,7 @@ const TitleCards = ({ title, category, isGenre = false }) => {
       }
     };
     loadInitial();
-  }, [constructUrl, API_KEY]);
+  }, [constructUrl, API_KEY, lang]);
 
   const scroll = useCallback(
     async (dir) => {

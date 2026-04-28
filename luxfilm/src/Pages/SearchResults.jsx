@@ -8,7 +8,7 @@ const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q")?.trim() || "";
   const selectedGenre = searchParams.get("genre") || "";
-  const { t } = useContext(LanguageContext);
+  const { t, lang } = useContext(LanguageContext);
   const [movies, setMovies] = useState([]);
   const [genresList, setGenresList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const SearchResults = () => {
     const loadGenres = async () => {
       try {
         const { data } = await axios.get(
-          `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`,
+          `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=${lang}`,
         );
         setGenresList(data.genres || []);
       } catch (err) {
@@ -29,7 +29,7 @@ const SearchResults = () => {
     };
 
     loadGenres();
-  }, [API_KEY]);
+  }, [API_KEY, lang]);
 
   useEffect(() => {
     const loadResults = async () => {
@@ -49,6 +49,7 @@ const SearchResults = () => {
               query,
               include_adult: false,
               page: 1,
+              language: lang,
             },
           });
 
@@ -67,6 +68,7 @@ const SearchResults = () => {
               with_genres: selectedGenre,
               sort_by: "popularity.desc",
               page: 1,
+              language: lang,
             },
           });
 
@@ -81,7 +83,7 @@ const SearchResults = () => {
     };
 
     loadResults();
-  }, [API_KEY, query, selectedGenre, t]);
+  }, [API_KEY, query, selectedGenre, t, lang]);
 
   const genreName = genresList.find(
     (genre) => genre.id === Number(selectedGenre),

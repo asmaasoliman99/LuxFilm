@@ -3,18 +3,20 @@ import { useParams } from "react-router";
 import axios from "axios";
 import MovieCard from "../Components/MovieCard";
 import { LanguageContext } from "../context/LanguageContext";
+import { ThemeContext } from "../context/ThemeContext";
 
 const GenrePage = () => {
+   const { theme } = useContext(ThemeContext);
   const { genreId, genreName } = useParams();
   const [movies, setMovies] = useState([]);
-  const { t } = useContext(LanguageContext);
+  const { t, lang } = useContext(LanguageContext);
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
   useEffect(() => {
     const fetchGenreMovies = async () => {
       try {
         const res = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`,
+          `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&language=${lang} ${theme === "light" ? "text-black" : ""}`,
         );
         setMovies(res.data.results);
       } catch (err) {
@@ -22,7 +24,7 @@ const GenrePage = () => {
       }
     };
     fetchGenreMovies();
-  }, [genreId, API_KEY]);
+  }, [genreId, API_KEY, lang]);
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen p-8 pt-24">

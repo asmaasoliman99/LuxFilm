@@ -76,14 +76,14 @@ export default function NotFound() {
         className="relative bg-gray-900/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 text-center max-w-lg w-full border border-gray-700/50 transition-transform duration-200"
       >
         {/* Image */}
-        <img
+        {/* <img
           src="https://illustrations.popsy.co/gray/web-error.svg"
           alt="404 illustration"
           className="w-72 mx-auto mb-6 animate-float"
-        />
+        /> */}
 
         {/* Title */}
-        <h1 className="text-7xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-7xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-100 bg-clip-text text-transparent mb-4">
           404
         </h1>
 
