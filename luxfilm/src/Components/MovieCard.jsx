@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import { Play, Info, Heart } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
 
-// 1. القيمة الافتراضية هنا مهمة جداً []
 const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
   const [videoKey, setVideoKey] = useState(null);
   const [hovering, setHovering] = useState(false);

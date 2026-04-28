@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router"; // تأكدي إنها react-router-dom أو react-router حسب مشروعك
+import { Link } from "react-router"; 
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 
@@ -20,7 +20,6 @@ export default function NotFound() {
         }
       }}
     >
-      {/* Particles خلفية تفاعلية */}
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -29,7 +28,7 @@ export default function NotFound() {
           background: { color: "transparent" },
           particles: {
             number: { value: 40 },
-            color: { value: "#e50914" }, // لون أحمر خفيف يناسب لوجو الموقع
+            color: { value: "#e50914" },
             size: { value: 2 },
             move: { enable: true, speed: 0.8 },
             opacity: { value: 0.3 },
@@ -60,7 +59,7 @@ export default function NotFound() {
 
         <div className="flex justify-center gap-4 flex-wrap">
           <Link
-            to="/home"
+            to="/"
             className="px-8 py-3 rounded-xl bg-[var(--error-red)] text-white font-bold shadow-lg hover:bg-red-700 hover:scale-105 transition duration-300"
           >
             Go to Home
@@ -75,7 +74,6 @@ export default function NotFound() {
         </div>
       </div>
 
-      {/* Floating Animation - أنيميشن بسيط للعناصر */}
       <style>
         {`
           @keyframes float {

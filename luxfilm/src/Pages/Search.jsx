@@ -16,13 +16,11 @@ const SearchResults = () => {
   
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
-  // إعادة الضبط عند تغيير كلمة البحث
   useEffect(() => {
     setPage(1);
     setResults([]); 
   }, [query]);
 
-  // جلب البيانات من API
   useEffect(() => {
     const fetchResults = async () => {
       if (!query) return;
@@ -33,7 +31,6 @@ const SearchResults = () => {
         );
         setResults(res.data.results);
         
-        // تحديد الصفحات بـ 20 كحد أقصى لشكل جمالي أفضل
         const apiTotalPages = res.data.total_pages;
         setTotalPages(apiTotalPages > 20 ? 20 : apiTotalPages);
         
@@ -48,7 +45,6 @@ const SearchResults = () => {
     fetchResults();
   }, [query, lang, page, API_KEY]);
 
-  // الترتيب المحلي للنتائج
   const sortedResults = useMemo(() => {
     let sorted = [...results];
     if (sortBy === 'rating') {
@@ -97,7 +93,7 @@ const SearchResults = () => {
             {sortedResults.length > 0 ? (
               sortedResults.map((movie) => (
                 <div key={movie.id} className="w-full flex justify-center">
-                   {/* تم التأكد من أن MovieCard داخله img بـ loading="lazy" */}
+
                    <MovieCard movie={movie} API_KEY={API_KEY} />
                 </div>
               ))
@@ -108,7 +104,7 @@ const SearchResults = () => {
             )}
           </div>
 
-          {/* Pagination: الأزرار الأصلية مع رقم الصفحة الحالية فقط */}
+
           {results.length > 0 && totalPages > 1 && (
             <div className="flex justify-center items-center gap-8 mt-32">
               
