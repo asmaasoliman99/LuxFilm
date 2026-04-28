@@ -70,7 +70,7 @@ const MovieDetails = () => {
           <img
             src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
             className="w-full h-full object-cover opacity-60"
-            alt="backdrop"
+            alt={t('movieDetails.backdropAlt')}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent" />
@@ -130,12 +130,12 @@ const MovieDetails = () => {
                 <div className="flex items-center gap-1 text-gray-400">
                   <Clock size={16} />
                   <span>
-                    {Math.floor(item.runtime / 60)}h {item.runtime % 60}m
+                    {Math.floor(item.runtime / 60)}{t('movieDetails.hours')} {item.runtime % 60}{t('movieDetails.minutes')}
                   </span>
                 </div>
               )}
               <span className="px-2 py-0.5 border border-gray-600 text-[10px] rounded text-gray-400 uppercase">
-                Ultra HD 4K
+                {t('movieDetails.quality')}
               </span>
             </div>
             <div>
@@ -190,7 +190,7 @@ const MovieDetails = () => {
         {/* Episodes */}
         {isSeries && episodes.length > 0 && (
           <div className="mt-24">
-            <h2 className="text-3xl font-bold mb-8 border-l-4 border-red-600 pl-4">{t('movieDetails.episodes')}</h2>
+            <h2 className="text-3xl font-bold mb-8 border-s-4 border-red-600 ps-4">{t('movieDetails.episodes')}</h2>
             <div className="flex flex-col gap-4">
               {episodes.map((ep) => (
                 <div

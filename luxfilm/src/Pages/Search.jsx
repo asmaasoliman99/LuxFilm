@@ -61,7 +61,7 @@ useEffect(() => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4">
         <h2 className="text-2xl font-bold">
           {t('searchPage.title')}
-          <span className="text-[#842A3B]">"{query}"</span>
+          <span className="text-[#842A3B] ms-1">{query}</span>
         </h2>
 
         <div className="flex items-center gap-3">
@@ -100,7 +100,7 @@ useEffect(() => {
             )}
           </div>
 
-          {/* 3. أزرار الـ Pagination */}
+          {/* Pagination Buttons */}
           {results.length > 0 && (
             <div className="flex justify-center items-center gap-8 mt-32">
               <button 

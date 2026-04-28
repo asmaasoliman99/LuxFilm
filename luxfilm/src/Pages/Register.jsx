@@ -8,40 +8,39 @@ import { authService } from '../services/authService';
 import { movieService } from '../services/movieService';
 import { useLanguage } from '../Context/Language';
 
-// Base schema for individual field validation (has .shape)
-const registerBaseSchema = z.object({
-  fullName: z
-    .string()
-    .min(1, 'Full name is required')
-    .refine((name) => name.trim().split(' ').length >= 2, {
-      message: 'Please enter your first and last name',
-    }),
-  userName: z
-    .string()
-    .min(3, 'Username must be at least 3 characters')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
-  email: z.email('Invalid email address'),
-  phone: z
-    .string()
-    .min(10, 'Phone number must be at least 10 digits')
-    .regex(/^\d+$/, 'Phone number must contain only digits'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
-});
-
-// Full schema with refinements for form submission
-const registerSchema = registerBaseSchema.refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
-
-// Register component
 const Register = () => {
-
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  // Base schema for individual field validation (has .shape)
+  const registerBaseSchema = z.object({
+    fullName: z
+      .string()
+      .min(1, t('validation.fullNameRequired'))
+      .refine((name) => name.trim().split(' ').length >= 2, {
+        message: t('validation.fullNameTwoWords'),
+      }),
+    userName: z
+      .string()
+      .min(3, t('validation.usernameMin'))
+      .regex(/^[a-zA-Z0-9_]+$/, t('validation.usernameFormat')),
+    email: z.string().email(t('validation.emailInvalid')),
+    phone: z
+      .string()
+      .min(10, t('validation.phoneMin'))
+      .regex(/^\d+$/, t('validation.phoneDigits')),
+    password: z
+      .string()
+      .min(8, t('validation.passwordMin')),
+    confirmPassword: z.string(),
+  });
+
+  // Full schema with refinements for form submission
+  const registerSchema = registerBaseSchema.refine((data) => data.password === data.confirmPassword, {
+    message: t('validation.passwordsMatch'),
+    path: ['confirmPassword'],
+  });
+
   // form data state
   const [formData, setFormData] = useState({
     fullName: '',
@@ -89,7 +88,7 @@ const Register = () => {
 
     if (name === 'confirmPassword') {
       if (value !== formData.password) {
-        fieldError = 'Passwords do not match';
+        fieldError = t('validation.passwordsMatch');
       }
     } else {
       const fieldSchema = registerBaseSchema.shape[name];
@@ -97,7 +96,7 @@ const Register = () => {
         const result = fieldSchema.safeParse(value);
         if (!result.success) {
           // Use .issues for standard Zod reliability
-          fieldError = result.error.issues[0]?.message || 'Invalid input';
+          fieldError = result.error.issues[0]?.message || t('validation.invalidInput');
         }
       }
     }
@@ -127,7 +126,7 @@ const Register = () => {
       // Register via local service
       authService.registerUser(validatedData);
 
-      toast.success('Account created successfully!');
+      toast.success(t('auth.accountCreated'));
 
       // Navigate to login on success
       setTimeout(() => {
@@ -148,7 +147,7 @@ const Register = () => {
 
         setErrors(formattedErrors);
         setError(t('auth.pleaseFillFields'));
-        toast.error('Validation failed');
+        toast.error(t('auth.validationFailed'));
       }
 
     } finally {
@@ -172,9 +171,9 @@ const Register = () => {
 
       {/* Gradient Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#662222] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute -bottom-8 left-1/2 w-96 h-96 bg-[#3E0703] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute top-0 start-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute top-0 end-1/4 w-96 h-96 bg-[#662222] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute -bottom-8 start-1/2 w-96 h-96 bg-[#3E0703] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       </div>
 
 
@@ -215,7 +214,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.fullNamePlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.fullName && <p className="text-[#ff6b6b] text-sm mt-1">{errors.fullName}</p>}
@@ -233,7 +232,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.usernamePlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.userName && <p className="text-[#ff6b6b] text-sm mt-1">{errors.userName}</p>}
@@ -251,7 +250,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.emailPlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.email && <p className="text-[#ff6b6b] text-sm mt-1">{errors.email}</p>}
@@ -269,7 +268,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.phonePlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.phone && <p className="text-[#ff6b6b] text-sm mt-1">{errors.phone}</p>}
@@ -287,7 +286,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.passwordPlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
                 <button
                   type="button"
@@ -312,7 +311,7 @@ const Register = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder={t('auth.passwordPlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
                 <button
                   type="button"

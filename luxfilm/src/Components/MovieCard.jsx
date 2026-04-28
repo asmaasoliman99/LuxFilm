@@ -69,7 +69,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
         )}
       </div>
 
-      <div className="absolute top-[98%] left-0 w-full p-3 bg-[#181818] opacity-0 group-hover/card:opacity-100 invisible group-hover/card:visible transition-all duration-300 rounded-b-lg shadow-2xl">
+      <div className="absolute top-[98%] start-0 w-full p-3 bg-[#181818] opacity-0 group-hover/card:opacity-100 invisible group-hover/card:visible transition-all duration-300 rounded-b-lg shadow-2xl">
         <h3 className="text-white text-[12px] font-bold mb-2 line-clamp-1">
           {movie.title || movie.name}
         </h3>
@@ -116,7 +116,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
             <span className="text-green-500 font-bold">
               {(movie.vote_average * 10).toFixed(0)}% {t('movieCard.match')}
             </span>
-            <span className="text-gray-400">13+ • HD</span>
+            <span className="text-gray-400">{t('movieCard.ageRating')}</span>
           </div>
           <div className="text-[10px] text-gray-300 font-medium line-clamp-1">{genres}</div>
         </div>

@@ -42,7 +42,8 @@ const GenrePage = () => {
 
       {/* movie grid */}
       <div className='grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-x-10 gap-y-32 justify-items-center'>
-        {movies.length > 0 ? (
+        {movies.length
+         > 0 ? (
           movies.map(movie => (
             <div key={movie.id} className="w-full flex justify-center">
               <MovieCard 

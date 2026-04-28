@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-6 text-[11px] text-gray-500">
-          © 1997-2026 LuxFilm, Inc.
+          {t('footer.copyright', { year: '2026' })}
         </div>
       </div>
     </footer>

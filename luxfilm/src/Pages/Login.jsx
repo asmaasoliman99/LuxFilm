@@ -7,12 +7,6 @@ import logo from '../assets/logo.png';
 import { authService } from '../services/authService';
 import { useLanguage } from '../Context/Language';
 
-// Zod validation schema
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
-});
-
 const Login = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -23,6 +17,12 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // Zod validation schema using translations
+  const loginSchema = z.object({
+    email: z.string().email(t('validation.emailInvalid')),
+    password: z.string().min(1, t('validation.passwordRequired')),
+  });
+
   // handle blur validation - Uses single state update
   const handleBlur = (e) => {
     const { name, value } = e.target;
@@ -32,7 +32,7 @@ const Login = () => {
     if (fieldSchema) {
       const result = fieldSchema.safeParse(value);
       if (!result.success) {
-        fieldError = result.error.issues[0]?.message || 'Invalid input';
+        fieldError = result.error.issues[0]?.message || t('validation.invalidInput');
       }
     }
 
@@ -60,7 +60,7 @@ const Login = () => {
       // Attempt local login
       const user = authService.loginUser(validatedData.email, validatedData.password);
 
-      toast.success(`Welcome back, ${user.fullName || 'User'}!`);
+      toast.success(t('auth.welcomeBack', { name: user.fullName || 'User' }));
       navigate('/');
     } catch (err) {
       console.error('Authentication Error:', err);
@@ -77,11 +77,11 @@ const Login = () => {
 
         setErrors(formattedErrors);
         setError(t('auth.pleaseFillFields'));
-        toast.error('Validation failed');
+        toast.error(t('auth.validationFailed'));
       }
       // 2. Handle Errors from authService (e.g. Invalid credentials)
       else {
-        const msg = err?.message || 'Login failed. Please try again.';
+        const msg = err?.message || t('auth.loginFailed');
         setError(msg);
         toast.error(msg);
       }
@@ -95,9 +95,9 @@ const Login = () => {
 
       {/* Gradient Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#662222] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute -bottom-8 left-1/2 w-96 h-96 bg-[#3E0703] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute top-0 start-1/4 w-96 h-96 bg-[#842A3B] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute top-0 end-1/4 w-96 h-96 bg-[#662222] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute -bottom-8 start-1/2 w-96 h-96 bg-[#3E0703] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       </div>
 
       {/* Content */}
@@ -137,7 +137,7 @@ const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={handleBlur}
                   placeholder={t('auth.emailPlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
               {errors.email && <p className="text-[#ff6b6b] text-sm mt-1">{errors.email}</p>}
@@ -155,7 +155,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   onBlur={handleBlur}
                   placeholder={t('auth.passwordPlaceholder')}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
+                  className="bg-transparent border-none outline-none ms-3 w-full text-white placeholder:text-gray-500"
                 />
                 <button
                   type="button"
