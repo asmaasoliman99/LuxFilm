@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router';
+import { RouterProvider, createBrowserRouter, Navigate } from 'react-router';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './Context/AuthContext';
 import { WishlistProvider } from './Context/WishlistContext';
@@ -15,6 +15,7 @@ import AccountPage from './Pages/AccountPage';
 import './index.css';
 import SearchResults from './Pages/Search';
 import { LanguageProvider } from './Context/Language';
+import NotFound404 from './Pages/NotFound404';
 
 const router = createBrowserRouter([
   {
@@ -52,7 +53,11 @@ const router = createBrowserRouter([
       {
         path:'/Search',
         element:<SearchResults/>
-      }
+      },
+      {
+        path: "*",
+        element: <NotFound404 />,
+      },
     ],
   },
 ]);

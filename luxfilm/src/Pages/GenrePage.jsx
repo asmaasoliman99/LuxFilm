@@ -35,7 +35,7 @@ const GenrePage = () => {
       className='bg-[#141414] min-h-screen pt-48 md:pt-25 pb-20 p-6 md:p-12 pt-24 transition-all duration-500'
     >
       <div className="mb-12 flex items-center gap-4">
-        <div className="w-1.5 h-10 bg-[#842A3B] rounded-full"></div>
+        <div className="w-1.5 h-10 bg-[#8C1007] rounded-full"></div>
         <h1 className='text-3xl md:text-4xl font-bold text-white tracking-tight uppercase'>
           {lang === 'ar' ? `أفلام ${genreName}` : `${genreName} Movies`}
         </h1>
