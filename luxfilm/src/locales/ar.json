@@ -4,7 +4,8 @@
     "genres": "التصنيفات",
     "myList": "قائمتي",
     "searchPlaceholder": "العناوين، الأشخاص، التصنيفات",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "hi": "مرحباً، "
   },
   "hero": {
     "play": "تشغيل",
@@ -20,7 +21,8 @@
   "movieCard": {
     "match": "تطابق",
     "addToWishlist": "إضافة إلى قائمتي",
-    "removeFromWishlist": "إزالة من قائمتي"
+    "removeFromWishlist": "إزالة من قائمتي",
+    "ageRating": "13+ • HD"
   },
   "movieDetails": {
     "loading": "جاري التحميل...",
@@ -31,7 +33,11 @@
     "production": "الإنتاج",
     "status": "الحالة",
     "episodes": "الحلقات",
-    "recommendations": "لأنك شاهدت هذا"
+    "recommendations": "لأنك شاهدت هذا",
+    "hours": "س",
+    "minutes": "د",
+    "quality": "Ultra HD 4K",
+    "backdropAlt": "خلفية الفيلم"
   },
   "genrePage": {
     "genreTitle": "أفلام {{genre}}",
@@ -77,7 +83,8 @@
     "mediaCenter": "مركز الإعلام",
     "privacy": "الخصوصية",
     "contactUs": "اتصل بنا",
-    "serviceCode": "رمز الخدمة"
+    "serviceCode": "رمز الخدمة",
+    "copyright": "© 1997-{{year}} LuxFilm, Inc."
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -112,6 +119,75 @@
     "termsAgreement": "بتسجيل الدخول، فإنك توافق على",
     "termsOfService": "شروط الخدمة",
     "and": "و",
-    "privacyPolicy": "سياسة الخصوصية"
+    "privacyPolicy": "سياسة الخصوصية",
+    "welcomeBack": "مرحباً بعودتك، {{name}}!",
+    "validationFailed": "فشل التحقق",
+    "loginFailed": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.",
+    "accountCreated": "تم إنشاء الحساب بنجاح!"
+  },
+  "account": {
+    "wishlist": "قائمة الأمنيات",
+    "memberSince": "عضو منذ",
+    "accountStatus": "حالة الحساب",
+    "profileDetails": "تفاصيل الملف الشخصي",
+    "edit": "تعديل",
+    "cancel": "إلغاء",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "change": "تغيير",
+    "updatePassword": "تحديث كلمة المرور",
+    "updating": "جاري التحديث...",
+    "myWishlist": "قائمتي",
+    "viewAll": "عرض الكل",
+    "noSavedMovies": "لا توجد أفلام محفوظة بعد",
+    "browseMovies": "تصفح الأفلام",
+    "moreMovies": "+ {{count}} أفلام أخرى",
+    "dangerZone": "منطقة الخطر",
+    "signOut": "تسجيل الخروج من الحساب",
+    "accessDenied": "تم رفض الوصول",
+    "signInToView": "يجب تسجيل الدخول لعرض تفاصيل الحساب.",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "profileUpdated": "تم تحديث الملف الشخصي!",
+    "fixErrors": "يرجى تصحيح الأخطاء",
+    "passwordUpdated": "تم تحديث كلمة المرور بنجاح!",
+    "incorrectCurrentPassword": "كلمة المرور الحالية غير صحيحة",
+    "lastUpdatedUnknown": "آخر تحديث غير معروف",
+    "readOnly": "للقراءة فقط"
+  },
+  "titleCards": {
+    "loading": "جاري تحميل الأفلام..."
+  },
+  "common": {
+    "notAvailable": "غير متاح",
+    "loading": "جاري التحميل..."
+  },
+  "validation": {
+    "emailInvalid": "عنوان البريد الإلكتروني غير صالح",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "fullNameRequired": "الاسم الكامل مطلوب",
+    "fullNameTwoWords": "يرجى إدخال الاسم الأول والأخير",
+    "usernameMin": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
+    "usernameFormat": "يمكن أن يحتوي اسم المستخدم على أحرف وأرقام وشرطات سفلية فقط",
+    "phoneMin": "يجب أن يكون رقم الهاتف 10 أرقام على الأقل",
+    "phoneDigits": "يجب أن يحتوي رقم الهاتف على أرقام فقط",
+    "passwordMin": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "passwordsMatch": "كلمتا المرور غير متطابقتين",
+    "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+    "invalidInput": "إدخال غير صالح"
+  },
+  "wishlist": {
+    "toast": {
+      "added": "تمت إضافة \"{{title}}\" إلى قائمتك!",
+      "removed": "تمت إزالة \"{{title}}\" من قائمتك",
+      "cleared": "تم مسح القائمة"
+    }
+  },
+  "errors": {
+    "emailExists": "يوجد مستخدم بهذا البريد الإلكتروني بالفعل",
+    "usernameTaken": "اسم المستخدم مستخدم بالفعل",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "userNotFound": "المستخدم غير موجود"
   }
 }
