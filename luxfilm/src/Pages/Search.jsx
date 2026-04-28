@@ -7,6 +7,7 @@ const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
   const lang = searchParams.get('lang') || 'en';
+  
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('popularity');
@@ -15,15 +16,26 @@ const SearchResults = () => {
   
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
+  // إعادة الضبط عند تغيير كلمة البحث
+  useEffect(() => {
+    setPage(1);
+    setResults([]); 
+  }, [query]);
+
+  // جلب البيانات من API
   useEffect(() => {
     const fetchResults = async () => {
+      if (!query) return;
       setLoading(true);
       try {
         const res = await axios.get(
           `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}&language=${lang === 'ar' ? 'ar-SA' : 'en-US'}&page=${page}`
         );
         setResults(res.data.results);
-        setTotalPages(res.data.total_pages);
+        
+        // تحديد الصفحات بـ 20 كحد أقصى لشكل جمالي أفضل
+        const apiTotalPages = res.data.total_pages;
+        setTotalPages(apiTotalPages > 20 ? 20 : apiTotalPages);
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
@@ -32,16 +44,11 @@ const SearchResults = () => {
         setLoading(false);
       }
     };
-    if (query) fetchResults();
-  }, [query, lang, API_KEY, page]); 
-
     
-useEffect(() => {
-  if (page !== 1) {
-    setPage(1);
-  }
-}, [query, page]);
+    fetchResults();
+  }, [query, lang, page, API_KEY]);
 
+  // الترتيب المحلي للنتائج
   const sortedResults = useMemo(() => {
     let sorted = [...results];
     if (sortBy === 'rating') {
@@ -57,10 +64,11 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-[#141414] text-white pt-32 pb-40 px-8 md:px-16 overflow-x-hidden">
       
+      {/* Header & Sort */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4">
         <h2 className="text-2xl font-bold">
           {lang === 'ar' ? 'نتائج البحث عن: ' : 'Search Results for: '}
-          <span className="text-[#842A3B]">"{query}"</span>
+          <span className="text-[#842A3B]"> "{query}"</span>
         </h2>
 
         <div className="flex items-center gap-3">
@@ -89,6 +97,7 @@ useEffect(() => {
             {sortedResults.length > 0 ? (
               sortedResults.map((movie) => (
                 <div key={movie.id} className="w-full flex justify-center">
+                   {/* تم التأكد من أن MovieCard داخله img بـ loading="lazy" */}
                    <MovieCard movie={movie} API_KEY={API_KEY} />
                 </div>
               ))
@@ -99,20 +108,24 @@ useEffect(() => {
             )}
           </div>
 
-          {/* 3. أزرار الـ Pagination */}
-          {results.length > 0 && (
+          {/* Pagination: الأزرار الأصلية مع رقم الصفحة الحالية فقط */}
+          {results.length > 0 && totalPages > 1 && (
             <div className="flex justify-center items-center gap-8 mt-32">
+              
               <button 
                 disabled={page === 1}
                 onClick={() => setPage(p => p - 1)}
                 className="px-6 py-2 bg-[#222] border border-gray-700 rounded-md disabled:opacity-20 hover:bg-[#333] transition-all text-sm font-bold active:scale-95"
               >
-                {lang === 'ar' ? 'السابق' : 'Previous'}
+                {lang === 'ar' ? 'السابق' : 'Prev'}
               </button>
 
-              <div className="flex flex-col items-center">
-                <span className="text-[#842A3B] font-black text-xl leading-none">{page}</span>
-                <span className="text-[10px] text-gray-500 uppercase mt-1 tracking-widest">Page</span>
+              <div className="flex items-center gap-3">
+                <span className="text-gray-500 text-sm font-medium uppercase tracking-widest">Page</span>
+                <div className="w-12 h-12 rounded-full bg-[#842A3B] text-white font-black flex items-center justify-center text-xl shadow-[0_0_20px_rgba(132,42,59,0.4)]">
+                  {page}
+                </div>
+                <span className="text-gray-500 text-sm font-medium">/ {totalPages}</span>
               </div>
 
               <button 
