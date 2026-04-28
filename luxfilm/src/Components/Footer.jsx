@@ -1,7 +1,9 @@
 import React from 'react';
 import logo from '../assets/logo.png';
+import { useLanguage } from '../Context/Language';
 
 const Footer = () => {
+  const { t } = useLanguage();
   return (
     <footer className="bg-[#141414] text-[#e5e5e5] pt-16 pb-8 px-4 lg:px-12 border-t border-white/10 mt-20">
       <div className="max-w-7xl mx-auto">
@@ -21,38 +23,38 @@ const Footer = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-400">
           <ul className="flex flex-col gap-3">
-            <li className="hover:text-white cursor-pointer transition">Audio Description</li>
-            <li className="hover:text-white cursor-pointer transition">Investor Relations</li>
-            <li className="hover:text-white cursor-pointer transition">Legal Notices</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.audioDescription')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.investorRelations')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.legalNotices')}</li>
           </ul>
           
           <ul className="flex flex-col gap-3">
-            <li className="hover:text-white cursor-pointer transition">Help Center</li>
-            <li className="hover:text-white cursor-pointer transition">Jobs</li>
-            <li className="hover:text-white cursor-pointer transition">Cookie Preferences</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.helpCenter')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.jobs')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.cookiePreferences')}</li>
           </ul>
 
           <ul className="flex flex-col gap-3">
-            <li className="hover:text-white cursor-pointer transition">Gift Cards</li>
-            <li className="hover:text-white cursor-pointer transition">Terms of Use</li>
-            <li className="hover:text-white cursor-pointer transition">Corporate Information</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.giftCards')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.termsOfUse')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.corporateInformation')}</li>
           </ul>
 
           <ul className="flex flex-col gap-3">
-            <li className="hover:text-white cursor-pointer transition">Media Center</li>
-            <li className="hover:text-white cursor-pointer transition">Privacy</li>
-            <li className="hover:text-white cursor-pointer transition">Contact Us</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.mediaCenter')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.privacy')}</li>
+            <li className="hover:text-white cursor-pointer transition">{t('footer.contactUs')}</li>
           </ul>
         </div>
 
         <div className="mt-10">
           <button className="border border-gray-600 px-2 py-1 text-xs hover:border-white hover:text-white transition">
-            Service Code
+            {t('footer.serviceCode')}
           </button>
         </div>
 
         <div className="mt-6 text-[11px] text-gray-500">
-          © 1997-2026 LuxFilm, Inc.
+          {t('footer.copyright', { year: '2026' })}
         </div>
       </div>
     </footer>

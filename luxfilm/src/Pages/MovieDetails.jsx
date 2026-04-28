@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Play, Heart, Star, Calendar, Clock, Globe } from 'lucide-react';
 import TitleCards from '../Components/TitleCards';
 import { useWishlist } from '../Context/WishlistContext';
+import { useLanguage } from '../Context/Language';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const MovieDetails = () => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [isSeries, setIsSeries] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { lang, t } = useLanguage();
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
   const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -20,19 +22,20 @@ const MovieDetails = () => {
       try {
         let type = 'movie';
         let mainRes;
+        const currentLang = lang === 'ar' ? 'ar-SA' : 'en-US';
         try {
-          mainRes = await axios.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
+          mainRes = await axios.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=${currentLang}`);
           setIsSeries(false);
         } catch {
-          mainRes = await axios.get(`${BASE_URL}/tv/${id}?api_key=${API_KEY}`);
+          mainRes = await axios.get(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=${currentLang}`);
           type = 'tv';
           setIsSeries(true);
-          const sRes = await axios.get(`${BASE_URL}/tv/${id}/season/1?api_key=${API_KEY}`);
+          const sRes = await axios.get(`${BASE_URL}/tv/${id}/season/1?api_key=${API_KEY}&language=${currentLang}`);
           setEpisodes(sRes.data.episodes);
         }
         setItem(mainRes.data);
 
-        const vRes = await axios.get(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}`);
+        const vRes = await axios.get(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}&language=${currentLang}`);
         setTrailerKey(vRes.data.results.find((v) => v.type === 'Trailer')?.key);
       } catch (err) {
         console.error('Details Fetch Error:', err);
@@ -41,12 +44,12 @@ const MovieDetails = () => {
 
     fetchData();
     window.scrollTo(0, 0);
-  }, [id, API_KEY]);
+  }, [id, API_KEY, lang]);
 
   if (!item)
     return (
       <div className="h-screen bg-black flex items-center justify-center text-white font-bold">
-        Loading...
+        {t('movieDetails.loading')}
       </div>
     );
 
@@ -67,7 +70,7 @@ const MovieDetails = () => {
           <img
             src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
             className="w-full h-full object-cover opacity-60"
-            alt="backdrop"
+            alt={t('movieDetails.backdropAlt')}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent" />
@@ -92,7 +95,7 @@ const MovieDetails = () => {
 
         <div className="flex items-center gap-6 mb-8">
           <button className="flex items-center gap-2 px-10 py-3 bg-white text-black font-bold rounded hover:bg-white/80 transition text-xl shadow-lg">
-            <Play fill="black" size={24} /> Play
+            <Play fill="black" size={24} /> {t('movieDetails.play')}
           </button>
           <button
             onClick={() => toggleWishlist(item)}
@@ -101,7 +104,7 @@ const MovieDetails = () => {
                 ? 'border-[#842A3B] bg-[#842A3B]/20 hover:bg-[#842A3B]/30'
                 : 'border-gray-400 hover:border-white bg-black/20'
             }`}
-            title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+            title={inWishlist ? t('movieCard.removeFromWishlist') : t('movieCard.addToWishlist')}
           >
             <Heart
               size={24}
@@ -117,7 +120,7 @@ const MovieDetails = () => {
             <div className="flex flex-wrap items-center gap-4 text-sm font-bold">
               <div className="flex items-center gap-1 text-green-500">
                 <Star size={16} fill="currentColor" />
-                <span>{(item.vote_average * 10).toFixed(0)}% Match</span>
+                <span>{(item.vote_average * 10).toFixed(0)}% {t('movieCard.match')}</span>
               </div>
               <div className="flex items-center gap-1 text-gray-400">
                 <Calendar size={16} />
@@ -127,20 +130,20 @@ const MovieDetails = () => {
                 <div className="flex items-center gap-1 text-gray-400">
                   <Clock size={16} />
                   <span>
-                    {Math.floor(item.runtime / 60)}h {item.runtime % 60}m
+                    {Math.floor(item.runtime / 60)}{t('movieDetails.hours')} {item.runtime % 60}{t('movieDetails.minutes')}
                   </span>
                 </div>
               )}
               <span className="px-2 py-0.5 border border-gray-600 text-[10px] rounded text-gray-400 uppercase">
-                Ultra HD 4K
+                {t('movieDetails.quality')}
               </span>
             </div>
             <div>
-              <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-3">
-                Description
+              <h3 className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-3">
+                {t('movieDetails.description')}
               </h3>
               <p className="text-lg md:text-xl text-gray-100 leading-relaxed font-light">
-                {item.overview || 'No description available.'}
+                {item.overview || t('movieDetails.noDescription')}
               </p>
             </div>
           </div>
@@ -149,19 +152,19 @@ const MovieDetails = () => {
           <div className="bg-white/5 p-6 rounded-xl border border-white/10 space-y-4 text-sm">
             {[
               {
-                label: 'Original Language',
+                label: t('movieDetails.originalLanguage'),
                 val:
                   item.spoken_languages?.[0]?.english_name || item.original_language,
                 icon: <Globe size={14} />,
               },
               {
-                label: 'Production',
+                label: t('movieDetails.production'),
                 val: item.production_companies
                   ?.slice(0, 2)
                   .map((c) => c.name)
                   .join(', '),
               },
-              { label: 'Status', val: item.status, isBadge: true },
+              { label: t('movieDetails.status'), val: item.status, isBadge: true },
             ].map((info, idx) => (
               <div
                 key={idx}
@@ -187,7 +190,7 @@ const MovieDetails = () => {
         {/* Episodes */}
         {isSeries && episodes.length > 0 && (
           <div className="mt-24">
-            <h2 className="text-3xl font-bold mb-8 border-l-4 border-red-600 pl-4">Episodes</h2>
+            <h2 className="text-3xl font-bold mb-8 border-s-4 border-red-600 ps-4">{t('movieDetails.episodes')}</h2>
             <div className="flex flex-col gap-4">
               {episodes.map((ep) => (
                 <div
@@ -221,7 +224,7 @@ const MovieDetails = () => {
 
         <div className="mt-24">
           <TitleCards
-            title="Because you watched this"
+            title={t('movieDetails.recommendations')}
             category={`${isSeries ? 'tv' : 'movie'}/${id}/recommendations`}
           />
         </div>

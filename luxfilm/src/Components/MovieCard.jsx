@@ -3,12 +3,14 @@ import axios from 'axios';
 import { Link } from 'react-router';
 import { Play, Info, Heart } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
+import { useLanguage } from '../Context/Language';
 
 // 1. القيمة الافتراضية هنا مهمة جداً []
 const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
   const [videoKey, setVideoKey] = useState(null);
   const [hovering, setHovering] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
 
   const inWishlist = isInWishlist(movie.id);
 
@@ -73,7 +75,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
         )}
       </div>
 
-      <div className="absolute top-[98%] left-0 w-full p-3 bg-[#181818] opacity-0 group-hover/card:opacity-100 invisible group-hover/card:visible transition-all duration-300 rounded-b-lg shadow-2xl">
+      <div className="absolute top-[98%] start-0 w-full p-3 bg-[#181818] opacity-0 group-hover/card:opacity-100 invisible group-hover/card:visible transition-all duration-300 rounded-b-lg shadow-2xl">
         <h3 className="text-white text-[12px] font-bold mb-2 line-clamp-1">
           {movie.title || movie.name}
         </h3>
@@ -94,6 +96,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
                   ? 'border-[#842A3B] bg-[#842A3B]/20 hover:bg-[#842A3B]/40'
                   : 'border-gray-500 hover:border-white'
               }`}
+              title={inWishlist ? t('movieCard.removeFromWishlist') : t('movieCard.addToWishlist')}
             >
               <Heart
                 size={10}
@@ -112,9 +115,9 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
         <div className="text-[10px] text-white flex flex-col gap-1 text-left">
           <div className="flex items-center gap-2">
             <span className="text-green-500 font-bold">
-              {movie.vote_average ? (movie.vote_average * 10).toFixed(0) : 0}% Match
+              {(movie.vote_average * 10).toFixed(0)}% {t('movieCard.match')}
             </span>
-            <span className="text-gray-400">13+ • HD</span>
+            <span className="text-gray-400">{t('movieCard.ageRating')}</span>
           </div>
           {genres && <div className="text-[10px] text-gray-300 font-medium line-clamp-1">{genres}</div>}
         </div>

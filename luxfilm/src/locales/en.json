@@ -1,0 +1,193 @@
+{
+  "navbar": {
+    "home": "Home",
+    "genres": "Genres",
+    "myList": "My List",
+    "searchPlaceholder": "Titles, people, genres",
+    "login": "Login",
+    "hi": "Hi, "
+  },
+  "hero": {
+    "play": "Play",
+    "moreInfo": "More Info",
+    "loading": "Loading..."
+  },
+  "home": {
+    "blockbuster": "Blockbuster Movies",
+    "onlyOnLuxFilm": "Only on LuxFilm",
+    "upcoming": "Upcoming",
+    "topPicks": "Top Picks for You"
+  },
+  "movieCard": {
+    "match": "Match",
+    "addToWishlist": "Add to wishlist",
+    "removeFromWishlist": "Remove from wishlist",
+    "ageRating": "13+ • HD"
+  },
+  "movieDetails": {
+    "loading": "Loading...",
+    "play": "Play",
+    "description": "Description",
+    "noDescription": "No description available.",
+    "originalLanguage": "Original Language",
+    "production": "Production",
+    "status": "Status",
+    "episodes": "Episodes",
+    "recommendations": "Because you watched this",
+    "hours": "h",
+    "minutes": "m",
+    "quality": "Ultra HD 4K",
+    "backdropAlt": "Movie backdrop"
+  },
+  "genrePage": {
+    "genreTitle": "{{genre}} Movies",
+    "loading": "Loading movies..."
+  },
+  "wishlistPage": {
+    "title": "My Wishlist",
+    "signInToAccess": "Sign in to access your Wishlist",
+    "signInDescription": "Keep track of all the movies you want to watch. Sign in to save and manage your personal wishlist.",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyDescription": "Start exploring movies and add them to your wishlist by clicking the heart icon on any movie card.",
+    "browseMovies": "Browse Movies",
+    "movie": "movie",
+    "movies": "movies",
+    "saved": "saved",
+    "clearAll": "Clear All",
+    "details": "Details",
+    "remove": "Remove"
+  },
+  "searchPage": {
+    "title": "Search Results for: ",
+    "sortBy": "Sort by:",
+    "popularity": "Popularity",
+    "topRated": "Top Rated",
+    "releaseDate": "Release Date",
+    "noResults": "No results found.",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page"
+  },
+  "footer": {
+    "audioDescription": "Audio Description",
+    "investorRelations": "Investor Relations",
+    "legalNotices": "Legal Notices",
+    "helpCenter": "Help Center",
+    "jobs": "Jobs",
+    "cookiePreferences": "Cookie Preferences",
+    "giftCards": "Gift Cards",
+    "termsOfUse": "Terms of Use",
+    "corporateInformation": "Corporate Information",
+    "mediaCenter": "Media Center",
+    "privacy": "Privacy",
+    "contactUs": "Contact Us",
+    "serviceCode": "Service Code",
+    "copyright": "© 1997-{{year}} LuxFilm, Inc."
+  },
+  "auth": {
+    "login": "Login",
+    "signIn": "Sign In",
+    "register": "Register",
+    "signUp": "Sign Up",
+    "joinLuxFilm": "Join LuxFilm",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating account...",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email Address",
+    "phone": "Phone (Optional)",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "startStreaming": "Create your account and start streaming",
+    "emailPlaceholder": "your@email.com",
+    "fullNamePlaceholder": "John Doe",
+    "usernamePlaceholder": "johndoe123",
+    "phonePlaceholder": "0123456789",
+    "passwordPlaceholder": "••••••••",
+    "signInTitle": "Welcome Back",
+    "signInSubtitle": "Stream your favorite movies and shows",
+    "incorrectCredentials": "Incorrect email or password",
+    "pleaseFillFields": "Please fill empty fields correctly.",
+    "signInToAccount": "Sign in to your LuxFilm account",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signingIn": "Signing in...",
+    "termsAgreement": "By signing in, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "welcomeBack": "Welcome back, {{name}}!",
+    "validationFailed": "Validation failed",
+    "loginFailed": "Login failed. Please try again.",
+    "accountCreated": "Account created successfully!"
+  },
+  "account": {
+    "wishlist": "Wishlist",
+    "memberSince": "Member since",
+    "accountStatus": "Account status",
+    "profileDetails": "Profile Details",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "change": "Change",
+    "updatePassword": "Update Password",
+    "updating": "Updating...",
+    "myWishlist": "My Wishlist",
+    "viewAll": "View all",
+    "noSavedMovies": "No saved movies yet",
+    "browseMovies": "Browse movies",
+    "moreMovies": "+ {{count}} more movies",
+    "dangerZone": "Danger Zone",
+    "signOut": "Sign Out of Account",
+    "accessDenied": "Access Denied",
+    "signInToView": "You need to be signed in to view account details.",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "profileUpdated": "Profile updated!",
+    "fixErrors": "Please fix the errors",
+    "passwordUpdated": "Password updated successfully!",
+    "incorrectCurrentPassword": "Current password is incorrect",
+    "lastUpdatedUnknown": "last updated unknown",
+    "readOnly": "read only"
+  },
+  "titleCards": {
+    "loading": "Loading movies..."
+  },
+  "common": {
+    "notAvailable": "N/A",
+    "loading": "Loading..."
+  },
+  "validation": {
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Password is required",
+    "fullNameRequired": "Full name is required",
+    "fullNameTwoWords": "Please enter your first and last name",
+    "usernameMin": "Username must be at least 3 characters",
+    "usernameFormat": "Username can only contain letters, numbers, and underscores",
+    "phoneMin": "Phone number must be at least 10 digits",
+    "phoneDigits": "Phone number must contain only digits",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordsMatch": "Passwords do not match",
+    "currentPasswordRequired": "Current password required",
+    "invalidInput": "Invalid input"
+  },
+  "wishlist": {
+    "toast": {
+      "added": "\"{{title}}\" added to wishlist!",
+      "removed": "\"{{title}}\" removed from wishlist",
+      "cleared": "Wishlist cleared"
+    }
+  },
+  "errors": {
+    "emailExists": "User with this email already exists",
+    "usernameTaken": "Username is already taken",
+    "invalidCredentials": "Invalid email or password",
+    "userNotFound": "User not found"
+  }
+}
