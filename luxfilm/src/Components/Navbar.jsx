@@ -11,7 +11,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { wishlistCount } = useWishlist();
-  const { lang, setLang } = useLanguage(); 
+  const { lang, setLang, t } = useLanguage(); 
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,12 +24,13 @@ const Navbar = () => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener('scroll', handleScroll);
     
-    axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`)
+    const currentLang = lang === 'ar' ? 'ar-SA' : 'en-US';
+    axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=${currentLang}`)
       .then(res => setGenres(res.data.genres))
       .catch(() => console.error('Error fetching genres'));
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [API_KEY]);
+  }, [API_KEY, lang]);
 
   useEffect(() => {
     if (!searchQuery.trim()) return;
@@ -46,9 +47,9 @@ const Navbar = () => {
       <div className="flex items-center gap-6 lg:gap-10">
         <Link to="/"><img src={logo} alt="LuxFilm" className="w-40 lg:w-30 object-contain" /></Link>
         <ul className="hidden md:flex items-center gap-5 text-sm text-[#e5e5e5]">
-          <li className={navItemClass}><Link to="/">Home</Link></li>
+          <li className={navItemClass}><Link to="/">{t('navbar.home')}</Link></li>
           <li className={`relative group flex items-center gap-1 ${navItemClass}`}>
-            Genres <ChevronDown size={14} />
+            {t('navbar.genres')} <ChevronDown size={14} />
             <div className="absolute top-full left-0 mt-2 w-48 bg-[#141414] border border-gray-700 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[100]">
               <div className="grid py-2 max-h-[400px] overflow-y-auto no-scrollbar">
                 {genres.map(g => (
@@ -57,7 +58,7 @@ const Navbar = () => {
               </div>
             </div>
           </li>
-          <li className={navItemClass}><Link to="/wishlist">My List</Link></li>
+          <li className={navItemClass}><Link to="/wishlist">{t('navbar.myList')}</Link></li>
         </ul>
       </div>
 
@@ -67,7 +68,7 @@ const Navbar = () => {
         {/* Search Input */}
         <div className={`flex items-center bg-black/60 border transition-all px-3 py-2 rounded-full overflow-hidden ${isSearchOpen ? 'w-44 lg:w-72 border-white/80' : 'w-16 border-white/40'}`}>
           <button onClick={() => setIsSearchOpen(!isSearchOpen)}><Search size={22} className="active:scale-90 transition" /></button>
-          <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus={isSearchOpen} placeholder="Search..." className={`bg-transparent outline-none text-sm px-3 transition-all ${isSearchOpen ? 'w-full opacity-100 ml-2' : 'w-0 opacity-0 pointer-events-none'}`} />
+          <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus={isSearchOpen} placeholder={t('navbar.searchPlaceholder')} className={`bg-transparent outline-none text-sm px-3 transition-all ${isSearchOpen ? 'w-full opacity-100 ml-2' : 'w-0 opacity-0 pointer-events-none'}`} />
         </div>
 
         {/* Language Dropdown */}
@@ -112,7 +113,10 @@ const Navbar = () => {
             <LogOut size={24} className="hover:text-[#ff4444] transition cursor-pointer" onClick={() => { logout(); navigate('/login'); }} />
           </div>
         ) : (
-          <LogIn size={24} className="hover:text-[#842A3B] transition cursor-pointer" onClick={() => navigate('/login')} />
+          <div className="flex items-center gap-2 cursor-pointer hover:text-[#842A3B] transition" onClick={() => navigate('/login')}>
+            <LogIn size={24} />
+            <span className="text-sm font-bold hidden md:block">{t('navbar.login')}</span>
+          </div>
         )}
       </div>
     </nav>

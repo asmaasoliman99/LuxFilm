@@ -3,16 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { Play, Info } from 'lucide-react';
 import { useNavigate } from 'react-router'; 
 import TitleCards from '../Components/TitleCards';
+import { useLanguage } from '../Context/Language';
 
 const Home = () => {
   const [heroMovie, setHeroMovie] = useState(null);
   const navigate = useNavigate(); 
+  const { t, lang } = useLanguage();
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
   useEffect(() => {
     const getHero = async () => {
       try {
-        const res = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
+        const res = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&language=${lang === 'ar' ? 'ar-SA' : 'en-US'}`);
         const results = res.data.results;
         const randomMovie = results[Math.floor(Math.random() * results.length)];
         setHeroMovie(randomMovie);
@@ -24,7 +26,7 @@ const Home = () => {
     if (API_KEY) {
       getHero();
     }
-  }, [API_KEY]);
+  }, [API_KEY, lang]);
 
   const handleMoreInfo = () => {
     if (heroMovie?.id) {
@@ -51,21 +53,21 @@ const Home = () => {
 
         <div className="relative z-10 px-6 md:px-12 max-w-3xl mt-10">
           <h1 className='text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white'>
-            {heroMovie?.title || heroMovie?.name || "Loading..."}
+            {heroMovie?.title || heroMovie?.name || t('hero.loading')}
           </h1>
           <p className='text-sm md:text-lg text-gray-200 leading-snug mb-8 drop-shadow-md line-clamp-3 md:line-clamp-4'>
             {heroMovie?.overview}
           </p>
           <div className="flex items-center gap-3">
             <button className='flex items-center gap-2 bg-white text-black px-5 py-2 md:px-8 md:py-3 rounded hover:bg-white/80 transition font-bold shadow-lg'>
-              <Play className="fill-black w-5 h-5 md:w-6 md:h-6" /> Play
+              <Play className="fill-black w-5 h-5 md:w-6 md:h-6" /> {t('hero.play')}
             </button>
 
             <button 
               onClick={handleMoreInfo}
               className='flex items-center gap-2 bg-gray-500/50 text-white px-5 py-2 md:px-8 md:py-3 rounded hover:bg-gray-500/30 transition font-bold backdrop-blur-md shadow-lg'
             >
-              <Info className="w-5 h-5 md:w-6 md:h-6" /> More Info
+              <Info className="w-5 h-5 md:w-6 md:h-6" /> {t('hero.moreInfo')}
             </button>
           </div>
         </div>
@@ -73,10 +75,10 @@ const Home = () => {
 
       {/* Movies Rows */}
       <div className="relative z-20 px-0 -mt-10 md:-mt-24 flex flex-col gap-3 pb-35">
-        <TitleCards title="Blockbuster Movies" category="top_rated" />
-        <TitleCards title="Only on LuxFilm" category="popular" />
-        <TitleCards title="Upcoming" category="upcoming" />
-        <TitleCards title="Top Picks for You" category="now_playing" />
+        <TitleCards title={t('home.blockbuster')} category="top_rated" />
+        <TitleCards title={t('home.onlyOnLuxFilm')} category="popular" />
+        <TitleCards title={t('home.upcoming')} category="upcoming" />
+        <TitleCards title={t('home.topPicks')} category="now_playing" />
       </div>
     </div>
   );

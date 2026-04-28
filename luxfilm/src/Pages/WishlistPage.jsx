@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router';
 import { Heart, Trash2, Play, Info, Star, BookmarkX, ShoppingBag } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
 import { useAuth } from '../Context/AuthContext';
+import { useLanguage } from '../Context/Language';
 
 const WishlistPage = () => {
   const { wishlist, removeFromWishlist, clearWishlist, wishlistCount } = useWishlist();
   const { isLoggedIn } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [hoveredId, setHoveredId] = useState(null);
 
@@ -21,22 +23,22 @@ const WishlistPage = () => {
             🔒
           </div>
         </div>
-        <h2 className="text-3xl font-black mb-3 text-center">Sign in to access your Wishlist</h2>
+        <h2 className="text-3xl font-black mb-3 text-center">{t('wishlistPage.signInToAccess')}</h2>
         <p className="text-gray-400 text-center mb-8 max-w-md">
-          Keep track of all the movies you want to watch. Sign in to save and manage your personal wishlist.
+          {t('wishlistPage.signInDescription')}
         </p>
         <div className="flex gap-4">
           <button
             onClick={() => navigate('/login')}
             className="px-8 py-3 bg-gradient-to-r from-[#842A3B] to-[#662222] text-white font-bold rounded-lg hover:from-[#A3485A] hover:to-[#7d3535] transition-all duration-300 hover:scale-105"
           >
-            Sign In
+            {t('wishlistPage.signIn')}
           </button>
           <button
             onClick={() => navigate('/register')}
             className="px-8 py-3 border-2 border-[#842A3B] text-white font-bold rounded-lg hover:bg-[#842A3B]/20 transition-all duration-300"
           >
-            Create Account
+            {t('wishlistPage.createAccount')}
           </button>
         </div>
       </div>
@@ -51,16 +53,15 @@ const WishlistPage = () => {
             <BookmarkX size={52} className="text-gray-600" />
           </div>
         </div>
-        <h2 className="text-3xl font-black mb-3 text-center">Your wishlist is empty</h2>
+        <h2 className="text-3xl font-black mb-3 text-center">{t('wishlistPage.emptyTitle')}</h2>
         <p className="text-gray-400 text-center mb-8 max-w-md text-sm leading-relaxed">
-          Start exploring movies and add them to your wishlist by clicking the{' '}
-          <Heart size={14} className="inline text-[#842A3B]" /> heart icon on any movie card.
+          {t('wishlistPage.emptyDescription')}
         </p>
         <button
           onClick={() => navigate('/')}
           className="px-8 py-3 bg-gradient-to-r from-[#842A3B] to-[#662222] text-white font-bold rounded-lg hover:from-[#A3485A] hover:to-[#7d3535] transition-all duration-300 hover:scale-105"
         >
-          Browse Movies
+          {t('wishlistPage.browseMovies')}
         </button>
       </div>
     );
@@ -73,10 +74,10 @@ const WishlistPage = () => {
         <div>
           <div className="flex items-center gap-3 mb-1">
             <Heart size={28} className="text-[#842A3B] fill-[#842A3B]" />
-            <h1 className="text-4xl md:text-5xl font-black">My Wishlist</h1>
+            <h1 className="text-4xl md:text-5xl font-black">{t('wishlistPage.title')}</h1>
           </div>
           <p className="text-gray-400 ml-11">
-            {wishlistCount} {wishlistCount === 1 ? 'movie' : 'movies'} saved
+            {wishlistCount} {wishlistCount === 1 ? t('wishlistPage.movie') : t('wishlistPage.movies')} {t('wishlistPage.saved')}
           </p>
         </div>
 
@@ -85,7 +86,7 @@ const WishlistPage = () => {
           className="flex items-center gap-2 border border-gray-700 text-gray-400 hover:border-red-500 hover:text-red-500 transition-all duration-300 px-5 py-2.5 rounded-lg text-sm font-semibold self-start md:self-auto"
         >
           <Trash2 size={16} />
-          Clear All
+          {t('wishlistPage.clearAll')}
         </button>
       </div>
 
@@ -120,13 +121,13 @@ const WishlistPage = () => {
                   to={`/movie/${movie.id}`}
                   className="flex items-center gap-1.5 bg-white text-black text-xs font-bold px-4 py-2 rounded-full hover:bg-gray-200 transition"
                 >
-                  <Info size={12} /> Details
+                  <Info size={12} /> {t('wishlistPage.details')}
                 </Link>
                 <button
                   onClick={() => removeFromWishlist(movie.id)}
                   className="flex items-center gap-1.5 bg-[#842A3B]/80 text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-[#A3485A] transition"
                 >
-                  <Trash2 size={12} /> Remove
+                  <Trash2 size={12} /> {t('wishlistPage.remove')}
                 </button>
               </div>
 

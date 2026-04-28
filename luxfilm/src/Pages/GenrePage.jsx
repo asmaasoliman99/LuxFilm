@@ -7,7 +7,7 @@ import { useLanguage } from '../Context/Language';
 const GenrePage = () => {
   const { genreId, genreName } = useParams();
   const [movies, setMovies] = useState([]);
-  const { lang, getTMDBLang } = useLanguage();
+  const { lang, getTMDBLang, t } = useLanguage();
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
   const currentLang = getTMDBLang();
@@ -31,13 +31,12 @@ const GenrePage = () => {
 
   return (
     <div 
-      dir={lang === 'ar' ? 'rtl' : 'ltr'} 
       className='bg-[#141414] min-h-screen pt-48 md:pt-25 pb-20 p-6 md:p-12 pt-24 transition-all duration-500'
     >
       <div className="mb-12 flex items-center gap-4">
         <div className="w-1.5 h-10 bg-[#842A3B] rounded-full"></div>
         <h1 className='text-3xl md:text-4xl font-bold text-white tracking-tight uppercase'>
-          {lang === 'ar' ? `أفلام ${genreName}` : `${genreName} Movies`}
+          {t('genrePage.genreTitle', { genre: genreName })}
         </h1>
       </div>
 
@@ -55,7 +54,7 @@ const GenrePage = () => {
           ))
         ) : (
           <div className="col-span-full text-gray-500 mt-20 text-xl font-medium italic">
-             {lang === 'ar' ? 'جاري تحميل الأفلام...' : 'Loading movies...'}
+             {t('genrePage.loading')}
           </div>
         )}
       </div>

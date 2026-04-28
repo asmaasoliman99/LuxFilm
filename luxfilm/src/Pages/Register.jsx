@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import logo from '../assets/logo.png';
 import { authService } from '../services/authService';
 import { movieService } from '../services/movieService';
+import { useLanguage } from '../Context/Language';
 
 // Base schema for individual field validation (has .shape)
 const registerBaseSchema = z.object({
@@ -40,6 +41,7 @@ const registerSchema = registerBaseSchema.refine((data) => data.password === dat
 const Register = () => {
 
   const navigate = useNavigate();
+  const { t } = useLanguage();
   // form data state
   const [formData, setFormData] = useState({
     fullName: '',
@@ -145,7 +147,7 @@ const Register = () => {
         });
 
         setErrors(formattedErrors);
-        setError('Please fill empty fields correctly.');
+        setError(t('auth.pleaseFillFields'));
         toast.error('Validation failed');
       }
 
@@ -189,8 +191,8 @@ const Register = () => {
         {/* Form Card */}
         <div className="bg-black/40 backdrop-blur-xl border border-[#842A3B]/30 rounded-2xl p-8 shadow-2xl">
 
-          <h1 className="text-3xl font-extrabold text-white mb-2 text-center">Join LuxFilm</h1>
-          <p className="text-gray-400 text-center mb-8 text-sm">Create your account and start streaming</p>
+          <h1 className="text-3xl font-extrabold text-white mb-2 text-center">{t('auth.joinLuxFilm')}</h1>
+          <p className="text-gray-400 text-center mb-8 text-sm">{t('auth.startStreaming')}</p>
 
           {error && (
             <div className="mb-6 p-4 bg-[#8C1007]/20 border border-[#8C1007] rounded-lg flex items-start gap-3">
@@ -203,7 +205,7 @@ const Register = () => {
 
             {/* Full Name Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Full Name</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.fullName')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.fullName ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <User size={18} className="text-gray-400" />
                 <input
@@ -212,7 +214,7 @@ const Register = () => {
                   value={formData.fullName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="John Doe"
+                  placeholder={t('auth.fullNamePlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
@@ -221,7 +223,7 @@ const Register = () => {
 
             {/* Username Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Username</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.username')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.userName ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <User size={18} className="text-gray-400" />
                 <input
@@ -230,7 +232,7 @@ const Register = () => {
                   value={formData.userName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="johndoe123"
+                  placeholder={t('auth.usernamePlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
@@ -239,7 +241,7 @@ const Register = () => {
 
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Email Address</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.email')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.email ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <Mail size={18} className="text-gray-400" />
                 <input
@@ -248,7 +250,7 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="your@email.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
@@ -257,7 +259,7 @@ const Register = () => {
 
             {/* Phone Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Phone (Optional)</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.phone')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.phone ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <Phone size={18} className="text-gray-400" />
                 <input
@@ -266,7 +268,7 @@ const Register = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="0123456789"
+                  placeholder={t('auth.phonePlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
               </div>
@@ -275,7 +277,7 @@ const Register = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.password')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.password ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <Lock size={18} className="text-gray-400" />
                 <input
@@ -284,7 +286,7 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
                 <button
@@ -300,7 +302,7 @@ const Register = () => {
 
             {/* Confirm Password Field */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Confirm Password</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">{t('auth.confirmPassword')}</label>
               <div className={`flex items-center bg-white/10 border rounded-lg px-4 py-3 focus-within:bg-white/15 transition-all duration-300 ${errors.confirmPassword ? 'border-[#8C1007] focus-within:border-[#8C1007]' : 'border-white/20 focus-within:border-[#842A3B]/60'}`}>
                 <Lock size={18} className="text-gray-400" />
                 <input
@@ -309,7 +311,7 @@ const Register = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   className="bg-transparent border-none outline-none ml-3 w-full text-white placeholder:text-gray-500"
                 />
                 <button
@@ -330,10 +332,10 @@ const Register = () => {
               className="w-full bg-gradient-to-r from-[#842A3B] to-[#662222] hover:from-[#A3485A] hover:to-[#7d3535] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 shadow-lg"
             >
               {loading ? (
-                <span className="animate-pulse">Creating account...</span>
+                <span className="animate-pulse">{t('auth.creatingAccount')}</span>
               ) : (
                 <>
-                  Create Account <ArrowRight size={20} />
+                  {t('auth.createAccount')} <ArrowRight size={20} />
                 </>
               )}
             </button>
@@ -345,7 +347,7 @@ const Register = () => {
               <div className="w-full border-t border-white/10"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-black/40 text-gray-400">Already have an account?</span>
+              <span className="px-3 bg-black/40 text-gray-400">{t('auth.alreadyHaveAccount')}</span>
             </div>
           </div>
 
@@ -355,7 +357,7 @@ const Register = () => {
               type="button"
               className="w-full border-2 border-[#842A3B] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#842A3B] transition-all duration-300"
             >
-              Sign In
+              {t('auth.signIn')}
             </button>
           </Link>
         </div>

@@ -3,11 +3,13 @@ import axios from 'axios';
 import { Link } from 'react-router';
 import { Play, Info, Heart } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
+import { useLanguage } from '../Context/Language';
 
 const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
   const [videoKey, setVideoKey] = useState(null);
   const [hovering, setHovering] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
 
   const inWishlist = isInWishlist(movie.id);
 
@@ -89,7 +91,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
                   ? 'border-[#842A3B] bg-[#842A3B]/20 hover:bg-[#842A3B]/40'
                   : 'border-gray-500 hover:border-white'
               }`}
-              title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+              title={inWishlist ? t('movieCard.removeFromWishlist') : t('movieCard.addToWishlist')}
             >
               <Heart
                 size={10}
@@ -112,7 +114,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
         <div className="text-[10px] text-white flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <span className="text-green-500 font-bold">
-              {(movie.vote_average * 10).toFixed(0)}% Match
+              {(movie.vote_average * 10).toFixed(0)}% {t('movieCard.match')}
             </span>
             <span className="text-gray-400">13+ • HD</span>
           </div>

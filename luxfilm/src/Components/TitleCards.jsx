@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import axios from 'axios';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import MovieCard from './MovieCard';
+import { useLanguage } from '../Context/Language';
 
 const TitleCards = ({ title, category, isGenre = false }) => {
   const [movies, setMovies] = useState([]);
@@ -11,16 +12,17 @@ const TitleCards = ({ title, category, isGenre = false }) => {
   const [isRowHovered, setIsRowHovered] = useState(false);
   
   const cardsRef = useRef();
+  const { lang } = useLanguage();
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
   const BASE_URL = "https://api.themoviedb.org/3";
 
 
   const constructUrl = useCallback((pageNum) => {
-    const params = `api_key=${API_KEY}&page=${pageNum}`;
+    const params = `api_key=${API_KEY}&page=${pageNum}&language=${lang === 'ar' ? 'ar-SA' : 'en-US'}`;
     if (isGenre) return `${BASE_URL}/discover/movie?${params}&with_genres=${category}`;
     if (category.includes('/')) return `${BASE_URL}/${category}?${params}`;
     return `${BASE_URL}/movie/${category || 'now_playing'}?${params}`;
-  }, [category, isGenre, API_KEY]);
+  }, [category, isGenre, API_KEY, lang]);
 
   const pageCount = useMemo(() => {
     const perPage = window.innerWidth >= 1280 ? 6 : (window.innerWidth >= 768 ? 4 : 2);
@@ -33,7 +35,7 @@ const TitleCards = ({ title, category, isGenre = false }) => {
         setPage(1);
         setActivePageIndex(0);
         const [g, m] = await Promise.all([
-          axios.get(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`),
+          axios.get(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=${lang === 'ar' ? 'ar-SA' : 'en-US'}`),
           axios.get(constructUrl(1))
         ]);
         setGenresList(g.data.genres);
@@ -44,7 +46,7 @@ const TitleCards = ({ title, category, isGenre = false }) => {
       }
     };
     loadInitial();
-  }, [constructUrl, API_KEY]);
+  }, [constructUrl, API_KEY, lang]);
 
   const scroll = useCallback(async (dir) => {
     const container = cardsRef.current;
@@ -92,7 +94,7 @@ const TitleCards = ({ title, category, isGenre = false }) => {
         <div ref={cardsRef} className='flex gap-3 overflow-x-scroll no-scrollbar scroll-smooth pt-20 pb-60 -mt-20 -mb-60 px-6 md:px-12 w-full'>
           {movies.length > 0 ? movies.map((m, i) => (
             <MovieCard key={`${m.id}-${i}`} movie={m} API_KEY={API_KEY} genresList={genresList} />
-          )) : <div className="h-40 flex items-center text-gray-500 italic px-12">Loading movies...</div>}
+          )) : <div className="h-40 flex items-center text-gray-500 italic px-12">{lang === 'ar' ? 'جاري تحميل الأفلام...' : 'Loading movies...'}</div>}
         </div>
 
         <button onClick={() => scroll('right')} className='absolute right-0 z-[120] h-full w-10 md:w-16 bg-black/60 opacity-0 group-hover/arrows:opacity-100 transition-all flex items-center justify-center'>
