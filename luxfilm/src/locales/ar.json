@@ -1,0 +1,117 @@
+{
+  "navbar": {
+    "home": "الرئيسية",
+    "genres": "التصنيفات",
+    "myList": "قائمتي",
+    "searchPlaceholder": "العناوين، الأشخاص، التصنيفات",
+    "login": "تسجيل الدخول"
+  },
+  "hero": {
+    "play": "تشغيل",
+    "moreInfo": "المزيد من المعلومات",
+    "loading": "جاري التحميل..."
+  },
+  "home": {
+    "blockbuster": "أفلام رائجة",
+    "onlyOnLuxFilm": "فقط على LuxFilm",
+    "upcoming": "قريباً",
+    "topPicks": "أفضل الاختيارات لك"
+  },
+  "movieCard": {
+    "match": "تطابق",
+    "addToWishlist": "إضافة إلى قائمتي",
+    "removeFromWishlist": "إزالة من قائمتي"
+  },
+  "movieDetails": {
+    "loading": "جاري التحميل...",
+    "play": "تشغيل",
+    "description": "الوصف",
+    "noDescription": "لا يوجد وصف متاح.",
+    "originalLanguage": "اللغة الأصلية",
+    "production": "الإنتاج",
+    "status": "الحالة",
+    "episodes": "الحلقات",
+    "recommendations": "لأنك شاهدت هذا"
+  },
+  "genrePage": {
+    "genreTitle": "أفلام {{genre}}",
+    "loading": "جاري تحميل الأفلام..."
+  },
+  "wishlistPage": {
+    "title": "قائمتي",
+    "signInToAccess": "سجل دخول للوصول إلى قائمتك",
+    "signInDescription": "تابع جميع الأفلام التي تريد مشاهدتها. سجل الدخول لحفظ وإدارة قائمتك الشخصية.",
+    "signIn": "تسجيل الدخول",
+    "createAccount": "إنشاء حساب",
+    "emptyTitle": "قائمتك فارغة",
+    "emptyDescription": "ابدأ في استكشاف الأفلام وأضفها إلى قائمتك بالضغط على أيقونة القلب على أي بطاقة فيلم.",
+    "browseMovies": "تصفح الأفلام",
+    "movie": "فيلم",
+    "movies": "أفلام",
+    "saved": "محفوظة",
+    "clearAll": "مسح الكل",
+    "details": "التفاصيل",
+    "remove": "إزالة"
+  },
+  "searchPage": {
+    "title": "نتائج البحث عن: ",
+    "sortBy": "ترتيب حسب:",
+    "popularity": "الأكثر شهرة",
+    "topRated": "الأعلى تقييماً",
+    "releaseDate": "الأحدث",
+    "noResults": "لم يتم العثور على نتائج.",
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "صفحة"
+  },
+  "footer": {
+    "audioDescription": "وصف صوتي",
+    "investorRelations": "علاقات المستثمرين",
+    "legalNotices": "إشعارات قانونية",
+    "helpCenter": "مركز المساعدة",
+    "jobs": "وظائف",
+    "cookiePreferences": "تفضيلات ملفات تعريف الارتباط",
+    "giftCards": "بطاقات الهدايا",
+    "termsOfUse": "شروط الاستخدام",
+    "corporateInformation": "معلومات الشركة",
+    "mediaCenter": "مركز الإعلام",
+    "privacy": "الخصوصية",
+    "contactUs": "اتصل بنا",
+    "serviceCode": "رمز الخدمة"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "signIn": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "signUp": "اشتراك",
+    "joinLuxFilm": "انضم إلى LuxFilm",
+    "createAccount": "إنشاء حساب",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "fullName": "الاسم الكامل",
+    "username": "اسم المستخدم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف (اختياري)",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "startStreaming": "أنشئ حسابك وابدأ المشاهدة",
+    "emailPlaceholder": "your@email.com",
+    "fullNamePlaceholder": "John Doe",
+    "usernamePlaceholder": "johndoe123",
+    "phonePlaceholder": "0123456789",
+    "passwordPlaceholder": "••••••••",
+    "signInTitle": "مرحباً بعودتك",
+    "signInSubtitle": "شاهد أفلامك وعروضك المفضلة",
+    "incorrectCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "pleaseFillFields": "يرجى ملء الحقول الفارغة بشكل صحيح.",
+    "signInToAccount": "سجل الدخول إلى حساب LuxFilm الخاص بك",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "signingIn": "جاري تسجيل الدخول...",
+    "termsAgreement": "بتسجيل الدخول، فإنك توافق على",
+    "termsOfService": "شروط الخدمة",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية"
+  }
+}

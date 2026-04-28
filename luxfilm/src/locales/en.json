@@ -1,0 +1,117 @@
+{
+  "navbar": {
+    "home": "Home",
+    "genres": "Genres",
+    "myList": "My List",
+    "searchPlaceholder": "Titles, people, genres",
+    "login": "Login"
+  },
+  "hero": {
+    "play": "Play",
+    "moreInfo": "More Info",
+    "loading": "Loading..."
+  },
+  "home": {
+    "blockbuster": "Blockbuster Movies",
+    "onlyOnLuxFilm": "Only on LuxFilm",
+    "upcoming": "Upcoming",
+    "topPicks": "Top Picks for You"
+  },
+  "movieCard": {
+    "match": "Match",
+    "addToWishlist": "Add to wishlist",
+    "removeFromWishlist": "Remove from wishlist"
+  },
+  "movieDetails": {
+    "loading": "Loading...",
+    "play": "Play",
+    "description": "Description",
+    "noDescription": "No description available.",
+    "originalLanguage": "Original Language",
+    "production": "Production",
+    "status": "Status",
+    "episodes": "Episodes",
+    "recommendations": "Because you watched this"
+  },
+  "genrePage": {
+    "genreTitle": "{{genre}} Movies",
+    "loading": "Loading movies..."
+  },
+  "wishlistPage": {
+    "title": "My Wishlist",
+    "signInToAccess": "Sign in to access your Wishlist",
+    "signInDescription": "Keep track of all the movies you want to watch. Sign in to save and manage your personal wishlist.",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyDescription": "Start exploring movies and add them to your wishlist by clicking the heart icon on any movie card.",
+    "browseMovies": "Browse Movies",
+    "movie": "movie",
+    "movies": "movies",
+    "saved": "saved",
+    "clearAll": "Clear All",
+    "details": "Details",
+    "remove": "Remove"
+  },
+  "searchPage": {
+    "title": "Search Results for: ",
+    "sortBy": "Sort by:",
+    "popularity": "Popularity",
+    "topRated": "Top Rated",
+    "releaseDate": "Release Date",
+    "noResults": "No results found.",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page"
+  },
+  "footer": {
+    "audioDescription": "Audio Description",
+    "investorRelations": "Investor Relations",
+    "legalNotices": "Legal Notices",
+    "helpCenter": "Help Center",
+    "jobs": "Jobs",
+    "cookiePreferences": "Cookie Preferences",
+    "giftCards": "Gift Cards",
+    "termsOfUse": "Terms of Use",
+    "corporateInformation": "Corporate Information",
+    "mediaCenter": "Media Center",
+    "privacy": "Privacy",
+    "contactUs": "Contact Us",
+    "serviceCode": "Service Code"
+  },
+  "auth": {
+    "login": "Login",
+    "signIn": "Sign In",
+    "register": "Register",
+    "signUp": "Sign Up",
+    "joinLuxFilm": "Join LuxFilm",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating account...",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email Address",
+    "phone": "Phone (Optional)",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "startStreaming": "Create your account and start streaming",
+    "emailPlaceholder": "your@email.com",
+    "fullNamePlaceholder": "John Doe",
+    "usernamePlaceholder": "johndoe123",
+    "phonePlaceholder": "0123456789",
+    "passwordPlaceholder": "••••••••",
+    "signInTitle": "Welcome Back",
+    "signInSubtitle": "Stream your favorite movies and shows",
+    "incorrectCredentials": "Incorrect email or password",
+    "pleaseFillFields": "Please fill empty fields correctly.",
+    "signInToAccount": "Sign in to your LuxFilm account",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signingIn": "Signing in...",
+    "termsAgreement": "By signing in, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
+  }
+}
