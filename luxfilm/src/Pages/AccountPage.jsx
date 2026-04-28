@@ -27,7 +27,7 @@ const AccountPage = () => {
   const { user, logout, updateUser } = useAuth();
   const { wishlist, wishlistCount } = useWishlist();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
 
   const updateSchema = z.object({
     fullName: z
