@@ -5,7 +5,8 @@ import { Play, Info, Heart } from 'lucide-react';
 import { useWishlist } from '../Context/WishlistContext';
 import { useLanguage } from '../Context/Language';
 
-const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
+// 1. القيمة الافتراضية هنا مهمة جداً []
+const MovieCard = React.memo(({ movie, API_KEY, genresList = [] }) => {
   const [videoKey, setVideoKey] = useState(null);
   const [hovering, setHovering] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -13,15 +14,20 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
 
   const inWishlist = isInWishlist(movie.id);
 
-  const genres = useMemo(
-    () =>
-      movie.genre_ids
-        ?.slice(0, 3)
-        .map((id) => genresList.find((g) => g.id === id)?.name)
-        .filter(Boolean)
-        .join(' • '),
-    [movie.genre_ids, genresList]
-  );
+  const genres = useMemo(() => {
+    if (!movie?.genre_ids || !Array.isArray(genresList)) {
+      return "";
+    }
+
+    return movie.genre_ids
+      .slice(0, 3)
+      .map((id) => {
+        const foundGenre = genresList.find((g) => g && g.id === id);
+        return foundGenre ? foundGenre.name : null;
+      })
+      .filter(Boolean)
+      .join(' • ');
+  }, [movie.genre_ids, genresList]);
 
   const fetchTrailer = async () => {
     setHovering(true);
@@ -35,7 +41,7 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
       );
       if (trailer) setVideoKey(trailer.key);
     } catch (err) {
-      console.error(err);
+      console.error("Trailer Fetch Error:", err);
     }
   };
 
@@ -56,15 +62,15 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
         {hovering && videoKey ? (
           <iframe
             src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`}
-            className="w-full h-full scale-110 pointer-events-none"
-            frameBorder="0"
+            className="w-full h-full scale-110 pointer-events-none border-none"
+            title="movie-trailer"
             allow="autoplay"
           />
         ) : (
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path || movie.poster_path}`}
             className="w-full h-full object-cover"
-            alt={movie.title}
+            alt={movie.title || movie.name}
           />
         )}
       </div>
@@ -77,13 +83,12 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
         <div className="flex justify-between items-center mb-3 w-full">
           <div className="flex gap-1.5">
             <button
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
               className="p-1.5 bg-white rounded-full hover:bg-white/80 transition"
             >
               <Play size={10} fill="black" />
             </button>
 
-            {/* Wishlist Heart Button */}
             <button
               onClick={handleWishlistClick}
               className={`p-1.5 border rounded-full transition-all duration-200 ${
@@ -102,23 +107,19 @@ const MovieCard = React.memo(({ movie, API_KEY, genresList }) => {
             </button>
           </div>
 
-          <Link
-            to={`/movie/${movie.id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="p-1.5 border border-gray-500 rounded-full hover:border-white transition"
-          >
+          <div className="p-1.5 border border-gray-500 rounded-full hover:border-white transition">
             <Info size={12} className="text-white" />
-          </Link>
+          </div>
         </div>
 
-        <div className="text-[10px] text-white flex flex-col gap-1">
+        <div className="text-[10px] text-white flex flex-col gap-1 text-left">
           <div className="flex items-center gap-2">
             <span className="text-green-500 font-bold">
               {(movie.vote_average * 10).toFixed(0)}% {t('movieCard.match')}
             </span>
             <span className="text-gray-400">{t('movieCard.ageRating')}</span>
           </div>
-          <div className="text-[10px] text-gray-300 font-medium line-clamp-1">{genres}</div>
+          {genres && <div className="text-[10px] text-gray-300 font-medium line-clamp-1">{genres}</div>}
         </div>
       </div>
     </Link>

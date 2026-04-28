@@ -16,15 +16,26 @@ const SearchResults = () => {
   
   const API_KEY = import.meta.env.VITE_TMDB_KEY;
 
+  // إعادة الضبط عند تغيير كلمة البحث
+  useEffect(() => {
+    setPage(1);
+    setResults([]); 
+  }, [query]);
+
+  // جلب البيانات من API
   useEffect(() => {
     const fetchResults = async () => {
+      if (!query) return;
       setLoading(true);
       try {
         const res = await axios.get(
           `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}&language=${lang === 'ar' ? 'ar-SA' : 'en-US'}&page=${page}`
         );
         setResults(res.data.results);
-        setTotalPages(res.data.total_pages);
+        
+        // تحديد الصفحات بـ 20 كحد أقصى لشكل جمالي أفضل
+        const apiTotalPages = res.data.total_pages;
+        setTotalPages(apiTotalPages > 20 ? 20 : apiTotalPages);
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
@@ -33,16 +44,11 @@ const SearchResults = () => {
         setLoading(false);
       }
     };
-    if (query) fetchResults();
-  }, [query, lang, API_KEY, page]); 
-
     
-useEffect(() => {
-  if (page !== 1) {
-    setPage(1);
-  }
-}, [query, page]);
+    fetchResults();
+  }, [query, lang, page, API_KEY]);
 
+  // الترتيب المحلي للنتائج
   const sortedResults = useMemo(() => {
     let sorted = [...results];
     if (sortBy === 'rating') {
@@ -58,6 +64,7 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-[#141414] text-white pt-32 pb-40 px-8 md:px-16 overflow-x-hidden">
       
+      {/* Header & Sort */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4">
         <h2 className="text-2xl font-bold">
           {t('searchPage.title')}
@@ -90,6 +97,7 @@ useEffect(() => {
             {sortedResults.length > 0 ? (
               sortedResults.map((movie) => (
                 <div key={movie.id} className="w-full flex justify-center">
+                   {/* تم التأكد من أن MovieCard داخله img بـ loading="lazy" */}
                    <MovieCard movie={movie} API_KEY={API_KEY} />
                 </div>
               ))
@@ -100,9 +108,10 @@ useEffect(() => {
             )}
           </div>
 
-          {/* Pagination Buttons */}
-          {results.length > 0 && (
+          {/* Pagination: الأزرار الأصلية مع رقم الصفحة الحالية فقط */}
+          {results.length > 0 && totalPages > 1 && (
             <div className="flex justify-center items-center gap-8 mt-32">
+              
               <button 
                 disabled={page === 1}
                 onClick={() => setPage(p => p - 1)}
